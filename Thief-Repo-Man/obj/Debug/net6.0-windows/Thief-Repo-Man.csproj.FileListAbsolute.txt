@@ -38,3 +38,5 @@ C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\ob
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\player(drawn).xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\inkFree.xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\car.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\notepad.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\title_screen.xnb

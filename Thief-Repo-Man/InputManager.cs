@@ -37,6 +37,8 @@ namespace Thief_Repo_Man
         /// </summary>
         public bool vflipped = false;
 
+        private float speed = 150f;
+
         public void Update(GameTime gameTime)
         {
             #region Updating input state
@@ -55,28 +57,28 @@ namespace Thief_Repo_Man
             #region Direction input
 
             // Get position from the GamePad
-            Direction = currentGamePadState.ThumbSticks.Right * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Direction = currentGamePadState.ThumbSticks.Right * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Get position from the Keyboard
             if (currentKeyboardState.IsKeyDown(Keys.Left) ||
                 currentKeyboardState.IsKeyDown(Keys.A))
             {
-                Direction += new Vector2(-100 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                Direction += new Vector2(-speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Right) ||
                 currentKeyboardState.IsKeyDown(Keys.D))
             {
-                Direction += new Vector2(100 * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                Direction += new Vector2(speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up) ||
                 currentKeyboardState.IsKeyDown(Keys.W))
             {
-                Direction += new Vector2(0, -100 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Direction += new Vector2(0, -speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Down) ||
                 currentKeyboardState.IsKeyDown(Keys.S))
             {
-                Direction += new Vector2(0, 100 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Direction += new Vector2(0, speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             #endregion

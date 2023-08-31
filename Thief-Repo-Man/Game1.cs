@@ -12,8 +12,10 @@ namespace Thief_Repo_Man
 
         private Texture2D playerTexture;
         private Texture2D carTexture;
-        private Vector2 playerPosition;
+        private Texture2D notepadBackground;
 
+        private Vector2 centerScreenPosition;
+        private Vector2 playerPosition;
         private Vector2 car1Position;
         private Vector2 car2Position;
         private Vector2 car3Position;
@@ -24,6 +26,8 @@ namespace Thief_Repo_Man
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -48,6 +52,11 @@ namespace Thief_Repo_Man
                 GraphicsDevice.Viewport.Height / 2
             );
 
+            centerScreenPosition = new Vector2(
+                GraphicsDevice.Viewport.Width / 2,
+                GraphicsDevice.Viewport.Height / 2
+            );
+
             inputManager = new InputManager();
             base.Initialize();
         }
@@ -59,6 +68,7 @@ namespace Thief_Repo_Man
             // TODO: use this.Content to load your game content here
             playerTexture = Content.Load<Texture2D>("player(drawn)");
             carTexture = Content.Load<Texture2D>("car");
+            notepadBackground = Content.Load<Texture2D>("title_screen");
 
             inkFree = Content.Load<SpriteFont>("inkFree");
         }
@@ -80,15 +90,26 @@ namespace Thief_Repo_Man
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+            _spriteBatch.Draw(
+                notepadBackground, 
+                centerScreenPosition,
+                null,
+                Color.White,
+                0f,
+                new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2), 
+                1f, 
+                SpriteEffects.None, 
+                0f
+            );
             _spriteBatch.Draw(playerTexture, playerPosition, Color.White);
             _spriteBatch.Draw(carTexture, car1Position, Color.White);
             _spriteBatch.Draw(carTexture, car2Position, Color.White);
             _spriteBatch.Draw(carTexture, car3Position, Color.White);
-            _spriteBatch.DrawString(inkFree, $"Thief Repo Man", new Vector2(2, 2), Color.Gold, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(inkFree, $"Play", car1Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(inkFree, $"Exit", car2Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(inkFree, $"Options", car3Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(inkFree, $"Use 'WASD' to move and 'E' to repo vehicles", new Vector2(GraphicsDevice.Viewport.Width / 7, GraphicsDevice.Viewport.Height / 1.1f), Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            //_spriteBatch.DrawString(inkFree, $"Thief Repo Man", new Vector2(2, 2), Color.Gold, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+            //_spriteBatch.DrawString(inkFree, $"Play", car1Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            //_spriteBatch.DrawString(inkFree, $"Exit", car2Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            //_spriteBatch.DrawString(inkFree, $"Options", car3Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            //_spriteBatch.DrawString(inkFree, $"Use 'WASD' to move and 'E' to repo vehicles", new Vector2(GraphicsDevice.Viewport.Width / 7, GraphicsDevice.Viewport.Height / 1.1f), Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             _spriteBatch.End();
 
             base.Draw(gameTime);
