@@ -20,8 +20,12 @@ namespace Thief_Repo_Man
         private Vector2 car2Position;
         private Vector2 car3Position;
 
-        private InputManager inputManager;
+        //private InputManager inputManager;
         private SpriteFont inkFree;
+        private Player player;
+
+        KeyboardState currentKeyboardState;
+        GamePadState currentGamePadState;
 
         public Game1()
         {
@@ -40,8 +44,8 @@ namespace Thief_Repo_Man
                 GraphicsDevice.Viewport.Height / 4
             );
             car1Position = new Vector2(
-                GraphicsDevice.Viewport.Width / 4,
-                GraphicsDevice.Viewport.Height / 3.75f
+                GraphicsDevice.Viewport.Width / 2.7f,
+                GraphicsDevice.Viewport.Height / 2.25f
             );
             car2Position = new Vector2(
                 GraphicsDevice.Viewport.Width / 4,
@@ -57,7 +61,8 @@ namespace Thief_Repo_Man
                 GraphicsDevice.Viewport.Height / 2
             );
 
-            inputManager = new InputManager();
+            player = new Player(playerPosition);
+            //inputManager = new InputManager();
             base.Initialize();
         }
 
@@ -71,15 +76,32 @@ namespace Thief_Repo_Man
             notepadBackground = Content.Load<Texture2D>("title_screen");
 
             inkFree = Content.Load<SpriteFont>("inkFree");
+
+            player.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            inputManager.Update(gameTime);
-            if (inputManager.Exit) Exit();
+            currentKeyboardState = Keyboard.GetState();
+            currentGamePadState = GamePad.GetState(0);
+
+            if (currentGamePadState.Buttons.Back == ButtonState.Pressed || currentKeyboardState.IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
+            //inputManager.Update(gameTime);
+            //if (inputManager.Exit) Exit();
 
             // TODO: Add your update logic here
-            playerPosition += inputManager.Direction;
+            //playerPosition += inputManager.Direction;
+            //playerPosition += player.Direction;
+
+            if (currentKeyboardState.IsKeyDown(Keys.Space))
+            {
+                Debug.WriteLine(playerPosition);
+            }
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -101,12 +123,23 @@ namespace Thief_Repo_Man
                 SpriteEffects.None, 
                 0f
             );
-            _spriteBatch.Draw(playerTexture, playerPosition, Color.White);
+            //_spriteBatch.Draw(
+            //    playerTexture,
+            //    playerPosition,
+            //    null,
+            //    Color.White,
+            //    0f,
+            //    Vector2.Zero,
+            //    1.5f,
+            //    SpriteEffects.None,
+            //    0f
+            //);
+            player.Draw(gameTime, _spriteBatch);
             _spriteBatch.Draw(carTexture, car1Position, Color.White);
             _spriteBatch.Draw(carTexture, car2Position, Color.White);
             _spriteBatch.Draw(carTexture, car3Position, Color.White);
             //_spriteBatch.DrawString(inkFree, $"Thief Repo Man", new Vector2(2, 2), Color.Gold, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
-            //_spriteBatch.DrawString(inkFree, $"Play", car1Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            _spriteBatch.DrawString(inkFree, $"Play", car1Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(inkFree, $"Exit", car2Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(inkFree, $"Options", car3Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(inkFree, $"Use 'WASD' to move and 'E' to repo vehicles", new Vector2(GraphicsDevice.Viewport.Width / 7, GraphicsDevice.Viewport.Height / 1.1f), Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);

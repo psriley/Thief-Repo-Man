@@ -7,10 +7,12 @@
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/car.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/inkFree.spritefont</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/notepad.png</File>
+    <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/player_left.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/player(drawn).png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/title_screen.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
