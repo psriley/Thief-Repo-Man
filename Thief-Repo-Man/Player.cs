@@ -10,6 +10,7 @@ using System.Reflection.Metadata;
 using System.Diagnostics;
 using SharpDX.Direct3D9;
 using Microsoft.Xna.Framework.Content;
+using Thief_Repo_Man.Collisions;
 
 namespace Thief_Repo_Man
 {
@@ -50,10 +51,14 @@ namespace Thief_Repo_Man
         private Texture2D playerTexture;
         private Texture2D playerLeftTexture;
         private float speed = 200f;
+        private BoundingRectangle bounds;
+
+        public BoundingRectangle Bounds => bounds;
 
         public Player(Vector2 position)
         {
             this.playerPosition = position;
+            this.bounds = new BoundingRectangle(playerPosition, (57*1.5f), (57*1.5f));
         }
 
         public void Update(GameTime gameTime)
@@ -109,6 +114,10 @@ namespace Thief_Repo_Man
             #endregion
 
             playerPosition += Direction;
+
+            // Update the bounds to sync with position of the sprite
+            bounds.X = playerPosition.X;
+            bounds.Y = playerPosition.Y;
         }
 
         /// <summary>
@@ -155,6 +164,11 @@ namespace Thief_Repo_Man
                 spriteEffects,
                 0f
             );
+            //// Debug size of collider
+            //var rect = new Rectangle((int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
+            //spriteBatch.Draw(playerTexture, rect, Color.Red);
+
+            //spriteBatch.Draw(playerTexture, new Vector2(bounds.X, bounds.Y), Color.Red);
             //spriteBatch.Draw(playerTexture, playerPosition, null, Color.White, 0, new Vector2(64, 64), 0.25f, spriteEffects, 0);
         }
     }
