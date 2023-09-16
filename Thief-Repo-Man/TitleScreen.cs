@@ -40,7 +40,7 @@ namespace Thief_Repo_Man
         private SpriteFont inkFree;
         private SpriteFont gaegu;
         private SpriteFont rubik;
-        private Player player;
+        private PlayerInput playerInput;
         private Car car1;
         private Car car2;
         private Car exitCar;
@@ -105,7 +105,8 @@ namespace Thief_Repo_Man
                 GraphicsDevice.Viewport.Height / 2
             );
 
-            player = new Player(playerPosition);
+            //player = new CharacterController(playerPosition);
+            playerInput = new PlayerInput(playerPosition);
             car1 = new Car(car1Position);
 
             //inputManager = new InputManager();
@@ -124,17 +125,23 @@ namespace Thief_Repo_Man
             gaegu = Content.Load<SpriteFont>("gaegu");
             rubik = Content.Load<SpriteFont>("rubik");
 
-            player.LoadContent(Content);
+            //player.LoadContent(Content);
+            playerInput.LoadContent(Content);
             car1.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            #region Updating input state
+
+            //priorKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            currentGamePadState = GamePad.GetState(0);
 
             priorMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
+
+            //priorGamePadState = currentGamePadState;
+            currentGamePadState = GamePad.GetState(0);
 
             if (currentGamePadState.Buttons.Back == ButtonState.Pressed || currentKeyboardState.IsKeyDown(Keys.Escape))
             {
@@ -146,6 +153,8 @@ namespace Thief_Repo_Man
             {
                 Debug.WriteLine(currentMouseState.Position);
             }
+
+            #endregion
 
             #region Handling indication direction
             // Update the direction timer
@@ -181,24 +190,30 @@ namespace Thief_Repo_Man
             #endregion
 
             #region Handling collision
-            if (car1.Bounds.CollidesWith(player.Bounds))
-            {
-                if (!canExit) { canExit = true; }
-            }
-            else
-            {
-                if (canExit) { canExit = false; }
-            }
 
-            if (canExit && currentKeyboardState.IsKeyDown(Keys.E) || currentGamePadState.Buttons.A == ButtonState.Pressed)
+            // Calculate collisions if the currentMode of the player is walking.
+            if (playerInput.currentMode == 0)
             {
-                Exit();
-            }
-            //car1.Bounds;
-            //if (car.Bounds.CollidesWith(slimeGhost.Bounds))
-            //{
+                // The characterController will only exist here if the currentMode is walking.
+                if (car1.Bounds.CollidesWith(playerInput.characterController.Bounds))
+                {
+                    if (!canExit) { canExit = true; }
+                }
+                else
+                {
+                    if (canExit) { canExit = false; }
+                }
 
-            //}
+                if (canExit && currentKeyboardState.IsKeyDown(Keys.E) || currentGamePadState.Buttons.A == ButtonState.Pressed)
+                {
+                    Exit();
+                }
+                //car1.Bounds;
+                //if (car.Bounds.CollidesWith(slimeGhost.Bounds))
+                //{
+
+                //}
+            }
             #endregion
 
             //inputManager.Update(gameTime);
@@ -212,7 +227,9 @@ namespace Thief_Repo_Man
             //{
             //    Debug.WriteLine(playerPosition);
             //}
-            player.Update(gameTime);
+
+            //player.Update(gameTime, currentKeyboardState);
+            playerInput.Update(gameTime, currentKeyboardState);
 
             base.Update(gameTime);
         }
@@ -247,7 +264,7 @@ namespace Thief_Repo_Man
             //    0f
             //);
             car1.Draw(_spriteBatch);
-            player.Draw(gameTime, _spriteBatch);
+            playerInput.Draw(gameTime, _spriteBatch);
             //_spriteBatch.Draw(carTexture, car1Position, Color.White);
             //_spriteBatch.Draw(carTexture, car2Position, Color.White);
             //_spriteBatch.Draw(carTexture, car3Position, Color.White);

@@ -34,18 +34,8 @@ namespace Thief_Repo_Man
         RightR = 7,
     }
 
-    public class Player
+    public class CharacterController
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-
-        KeyboardState currentKeyboardState;
-        KeyboardState priorKeyboardState;
-        MouseState currentMouseState;
-        MouseState priorMouseState;
-        GamePadState currentGamePadState;
-        GamePadState priorGamePadState;
-
         private double animationTimer;
         private int animationIndex;
         private Tuple<int, int> forwardIndexRange = new Tuple<int, int>((int)WalkingTexture.ForwardL, (int)WalkingTexture.ForwardR);
@@ -103,7 +93,7 @@ namespace Thief_Repo_Man
 
         public BoundingRectangle Bounds => bounds;
 
-        public Player(Vector2 position)
+        public CharacterController(Vector2 position)
         {
             this.playerPosition = position;
             this.bounds = new BoundingRectangle(playerPosition, (44 * playerScale), (22 * playerScale));
@@ -112,21 +102,13 @@ namespace Thief_Repo_Man
             _direction = -Vector2.UnitY;
         }
 
-        public void Update(GameTime gameTime)
+        public void HandleInput(GameTime gt, KeyboardState ks)
         {
-            #region Updating input state
+            Update(gt, ks);
+        }
 
-            priorKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            priorMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
-
-            priorGamePadState = currentGamePadState;
-            currentGamePadState = GamePad.GetState(0);
-
-            #endregion
-
+        public void Update(GameTime gameTime, KeyboardState currentKeyboardState)
+        {
             #region Direction input
 
             // Get position from the GamePad

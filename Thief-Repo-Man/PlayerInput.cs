@@ -1,10 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace Thief_Repo_Man
 {
+    public enum ControlMode
+    {
+        Walking,
+        Driving
+    }
+
     public class PlayerInput
     {
+        //KeyboardState currentKeyboardState;
+        //KeyboardState priorKeyboardState;
+        //MouseState currentMouseState;
+        //MouseState priorMouseState;
+        //GamePadState currentGamePadState;
+        //GamePadState priorGamePadState;
+
         private static Vector2 _direction;
         /// <summary>
         /// Direction that the player is facing.
@@ -16,22 +35,70 @@ namespace Thief_Repo_Man
         /// </summary>
         public static bool Moving => _direction != Vector2.Zero;
 
+        public ControlMode currentMode;
+
+        public CharacterController characterController;
+        //private CarController carController;
+
+        public PlayerInput(Vector2 position)
+        {
+            currentMode = ControlMode.Walking; // start in walking mode
+            characterController = new CharacterController(position);
+        }
+
+        /// <summary>
+        /// Switch the control mode of the player (walking or driving).
+        /// </summary>
+        /// <param name="newMode"></param>
+        public void SwitchControlMode(ControlMode newMode)
+        {
+            currentMode = newMode;
+        }
+
         /// <summary>
         /// Set the direction based off of the keys that the player presses.
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, KeyboardState currentKeyboardState)
         {
-            _direction = Vector2.Zero;
-            var keyboardState = Keyboard.GetState();
-
-            if (keyboardState.GetPressedKeyCount() > 0)
+            switch (currentMode)
             {
-                if (keyboardState.IsKeyDown(Keys.W)) _direction.Y--;
-                if (keyboardState.IsKeyDown(Keys.A)) _direction.X--;
-                if (keyboardState.IsKeyDown(Keys.S)) _direction.Y++;
-                if (keyboardState.IsKeyDown(Keys.D)) _direction.X++;
+                case ControlMode.Walking:
+                    characterController.HandleInput(gameTime, currentKeyboardState);
+                    break;
+                case ControlMode.Driving:
+                    HandleDrivingInput();
+                    break;
             }
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+            switch (currentMode)
+            {
+                case ControlMode.Walking:
+                    characterController.LoadContent(content);
+                    break;
+                case ControlMode.Driving:
+                    break;
+            }
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            switch (currentMode)
+            {
+                case ControlMode.Walking:
+                    characterController.Draw(gameTime, spriteBatch);
+                    break;
+                case ControlMode.Driving:
+                    break;
+            }
+        }
+        
+        private void HandleDrivingInput()
+        {
+
         }
     }
 }
