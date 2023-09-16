@@ -38,12 +38,13 @@ namespace Thief_Repo_Man
         public ControlMode currentMode;
 
         public CharacterController characterController;
-        //private CarController carController;
+        public CarController carController;
 
         public PlayerInput(Vector2 position)
         {
             currentMode = ControlMode.Walking; // start in walking mode
             characterController = new CharacterController(position);
+            carController = new CarController(position);
         }
 
         /// <summary>
@@ -67,21 +68,15 @@ namespace Thief_Repo_Man
                     characterController.HandleInput(gameTime, currentKeyboardState);
                     break;
                 case ControlMode.Driving:
-                    HandleDrivingInput();
+                    carController.HandleInput(gameTime, currentKeyboardState);
                     break;
             }
         }
 
         public void LoadContent(ContentManager content)
         {
-            switch (currentMode)
-            {
-                case ControlMode.Walking:
-                    characterController.LoadContent(content);
-                    break;
-                case ControlMode.Driving:
-                    break;
-            }
+            characterController.LoadContent(content);
+            carController.LoadContent(content);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -92,13 +87,9 @@ namespace Thief_Repo_Man
                     characterController.Draw(gameTime, spriteBatch);
                     break;
                 case ControlMode.Driving:
+                    carController.Draw(gameTime, spriteBatch);
                     break;
             }
-        }
-        
-        private void HandleDrivingInput()
-        {
-
         }
     }
 }

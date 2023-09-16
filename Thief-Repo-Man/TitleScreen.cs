@@ -53,6 +53,7 @@ namespace Thief_Repo_Man
         MouseState currentMouseState;
 
         bool canExit = false;
+        bool inCar = false;
 
         public TitleScreen()
         {
@@ -85,6 +86,10 @@ namespace Thief_Repo_Man
             movementInstructionsPosition = new Vector2(
                 678,
                 25
+            );
+            exitInstructionsPosition = new Vector2(
+                368,
+                640
             );
             //movementInstructionsPosition = new Vector2(
             //    1075,
@@ -206,7 +211,9 @@ namespace Thief_Repo_Man
 
                 if (canExit && currentKeyboardState.IsKeyDown(Keys.E) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
-                    Exit();
+                    //Exit();
+                    playerInput.SwitchControlMode(ControlMode.Driving);
+                    inCar = true;
                 }
                 //car1.Bounds;
                 //if (car.Bounds.CollidesWith(slimeGhost.Bounds))
@@ -230,6 +237,13 @@ namespace Thief_Repo_Man
 
             //player.Update(gameTime, currentKeyboardState);
             playerInput.Update(gameTime, currentKeyboardState);
+
+            // Wrap the ship to keep it on-screen
+            var viewport = GraphicsDevice.Viewport;
+            if (playerPosition.Y < 0) playerPosition.Y = viewport.Height;
+            if (playerPosition.Y > viewport.Height) playerPosition.Y = 0;
+            if (playerPosition.X < 0) playerPosition.X = viewport.Width;
+            if (playerPosition.X > viewport.Width) playerPosition.X = 0;
 
             base.Update(gameTime);
         }
@@ -263,18 +277,29 @@ namespace Thief_Repo_Man
             //    SpriteEffects.None,
             //    0f
             //);
-            car1.Draw(_spriteBatch);
+            if (!inCar)
+            {
+                car1.Draw(_spriteBatch);
+            }
             playerInput.Draw(gameTime, _spriteBatch);
             //_spriteBatch.Draw(carTexture, car1Position, Color.White);
             //_spriteBatch.Draw(carTexture, car2Position, Color.White);
             //_spriteBatch.Draw(carTexture, car3Position, Color.White);
             //_spriteBatch.DrawString(inkFree, $"Thief Repo Man", new Vector2(2, 2), Color.Gold, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
-            _spriteBatch.Draw(indicationArrow, indicationArrowPosition, color);
+            if (!inCar)
+            {
+                _spriteBatch.Draw(indicationArrow, indicationArrowPosition, color);
+            }
             //_spriteBatch.DrawString(gaegu, "Exit", new Vector2(car1Position.X - 6f, car1Position.Y - 6f), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(gaegu, "Exit", new Vector2(car1Position.X + 3f, car1Position.Y + 3f), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(gaegu, "Exit", backExitTextPosition, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-            _spriteBatch.DrawString(gaegu, "Exit", frontExitTextPosition, color, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            if (!inCar)
+            {
+                _spriteBatch.DrawString(gaegu, "Enter", backExitTextPosition, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+                _spriteBatch.DrawString(gaegu, "Enter", frontExitTextPosition, color, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            }
             _spriteBatch.DrawString(gaegu, "Instructions: Move with 'WASD',\n interact with cars using 'E'", movementInstructionsPosition, Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            _spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", exitInstructionsPosition, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            _spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", new Vector2(exitInstructionsPosition.X - 4, exitInstructionsPosition.Y - 4), Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(rubik, "Exit with the car!", exitInstructionsPosition, Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(inkFree, $"Exit", car2Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             //_spriteBatch.DrawString(inkFree, $"Options", car3Position, Color.Gold, 0, Vector2.Zero, 2, SpriteEffects.None, 0);

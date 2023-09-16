@@ -51,11 +51,6 @@ namespace Thief_Repo_Man
         public static Vector2 Direction => _direction;
 
         /// <summary>
-        /// If the user has request to end the game
-        /// </summary>
-        public bool Exit { get; private set; } = false;
-
-        /// <summary>
         /// If the sprite needs to be flipped horizontally
         /// </summary>
         public bool hflipped = false;
