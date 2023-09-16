@@ -14,6 +14,26 @@ using Thief_Repo_Man.Collisions;
 
 namespace Thief_Repo_Man
 {
+    public enum Direction
+    {
+        Down = 0,
+        Right = 1,
+        Up = 2,
+        Left = 3,
+    }
+
+    public enum WalkingTexture
+    {
+        ForwardL = 0,
+        ForwardR = 1,
+        BackwardL = 2,
+        BackwardR = 3,
+        LeftL = 4,
+        LeftR = 5,
+        RightL = 6,
+        RightR = 7,
+    }
+
     public class Player
     {
         private GraphicsDeviceManager _graphics;
@@ -26,10 +46,19 @@ namespace Thief_Repo_Man
         GamePadState currentGamePadState;
         GamePadState priorGamePadState;
 
+        private double animationTimer;
+        private int animationIndex;
+        private Tuple<int, int> forwardIndexRange = new Tuple<int, int>((int)WalkingTexture.ForwardL, (int)WalkingTexture.ForwardR);
+        private Tuple<int, int> leftIndexRange = new Tuple<int, int>((int)WalkingTexture.LeftL, (int)WalkingTexture.LeftR);
+        private Tuple<int, int> rightIndexRange = new Tuple<int, int>((int)WalkingTexture.RightL, (int)WalkingTexture.RightR);
+        private Tuple<int, int> backwardIndexRange = new Tuple<int, int>((int)WalkingTexture.BackwardL, (int)WalkingTexture.BackwardR);
+        private Tuple<int, int> currentIndexRange;
+
+        private static Vector2 _direction;
         /// <summary>
-        /// The current direction
+        /// Direction that the player is facing.
         /// </summary>
-        public Vector2 Direction { get; private set; }
+        public static Vector2 Direction => _direction;
 
         /// <summary>
         /// If the user has request to end the game
@@ -46,25 +75,45 @@ namespace Thief_Repo_Man
         /// </summary>
         public bool vflipped = false;
 
-        private Vector2 playerPosition;
+        List<Keys> movementKeys = new List<Keys>
+        {
+            Keys.W,
+            Keys.A,
+            Keys.S,
+            Keys.D,
+            Keys.Up,
+            Keys.Left,
+            Keys.Down,
+            Keys.Right,
+        };
+
         private Texture2D texture;
         private Texture2D playerTexture;
+        private Texture2D forwardLTexture;
+        private Texture2D forwardRTexture;
         private Texture2D playerLeftTexture;
+        private Texture2D leftLTexture;
+        private Texture2D leftRTexture;
+        private bool moving;
+
+        private Vector2 playerPosition;
         private float speed = 200f;
         private BoundingRectangle bounds;
+        private float playerScale = 1.5f;
 
         public BoundingRectangle Bounds => bounds;
 
         public Player(Vector2 position)
         {
             this.playerPosition = position;
-            this.bounds = new BoundingRectangle(playerPosition, (57*1.5f), (57*1.5f));
+            this.bounds = new BoundingRectangle(playerPosition, (44 * playerScale), (22 * playerScale));
+            animationIndex = 0;
+            currentIndexRange = forwardIndexRange;
+            _direction = -Vector2.UnitY;
         }
 
         public void Update(GameTime gameTime)
         {
-            texture = playerTexture;
-
             #region Updating input state
 
             priorKeyboardState = currentKeyboardState;
@@ -81,43 +130,103 @@ namespace Thief_Repo_Man
             #region Direction input
 
             // Get position from the GamePad
-            Direction = currentGamePadState.ThumbSticks.Right * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //_direction = currentGamePadState.ThumbSticks.Right * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Get position from the Keyboard
-            if (currentKeyboardState.IsKeyDown(Keys.Left) ||
-                currentKeyboardState.IsKeyDown(Keys.A))
+            bool isMovementKeyPressed = movementKeys.Any(key => currentKeyboardState.IsKeyDown(key));
+
+            if (isMovementKeyPressed)
             {
-                Direction += new Vector2(-speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-                hflipped = false;
-                texture = playerLeftTexture;
+                // check specific key pressed and assign animation index and direction
+                moving = true;
+                _direction = Vector2.Zero;
+
+                if (currentKeyboardState.IsKeyDown(Keys.W)) { _direction.Y--; currentIndexRange = forwardIndexRange; }
+                else if (currentKeyboardState.IsKeyDown(Keys.S)) { _direction.Y++; currentIndexRange = backwardIndexRange; }
+                if (currentKeyboardState.IsKeyDown(Keys.A)) { _direction.X--; currentIndexRange = leftIndexRange; }
+                else if (currentKeyboardState.IsKeyDown(Keys.D)) { _direction.X++; currentIndexRange = rightIndexRange; }
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Right) ||
-                currentKeyboardState.IsKeyDown(Keys.D))
+            else
             {
-                Direction += new Vector2(speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-                hflipped = true;
-                texture = playerLeftTexture;
+                // set moving to false
+                moving = false;
+
+
+                if (_direction == Vector2.UnitX || _direction == -Vector2.UnitX)
+                {
+                    texture = playerLeftTexture;
+                }
+                else if (_direction == Vector2.UnitY || _direction == -Vector2.UnitY)
+                {
+                    texture = playerTexture;
+                }
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Up) ||
-                currentKeyboardState.IsKeyDown(Keys.W))
-            {
-                Direction += new Vector2(0, -speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                vflipped = false;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.Down) ||
-                currentKeyboardState.IsKeyDown(Keys.S))
-            {
-                Direction += new Vector2(0, speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                vflipped = true;
-            }
+
+            //// Get position from the Keyboard
+            //if (currentKeyboardState.IsKeyDown(Keys.Left) ||
+            //    currentKeyboardState.IsKeyDown(Keys.A))
+            //{
+            //    Direction += new Vector2(-speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+            //    hflipped = false;
+            //    texture = playerLeftTexture;
+            //}
+            //if (currentKeyboardState.IsKeyDown(Keys.Right) ||
+            //    currentKeyboardState.IsKeyDown(Keys.D))
+            //{
+            //    Direction += new Vector2(speed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+            //    hflipped = true;
+            //    texture = playerLeftTexture;
+            //}
+            //if (currentKeyboardState.IsKeyDown(Keys.Up) ||
+            //    currentKeyboardState.IsKeyDown(Keys.W))
+            //{
+            //    if (priorKeyboardState.IsKeyUp(Keys.Up) || priorKeyboardState.IsKeyUp(Keys.W))
+            //    {
+            //        movingForward = true;
+            //    }
+
+            //    Direction += new Vector2(0, -speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //    //texture = ;
+            //    //vflipped = false;
+            //}
+            //if (currentKeyboardState.IsKeyDown(Keys.Down) ||
+            //    currentKeyboardState.IsKeyDown(Keys.S))
+            //{
+            //    Direction += new Vector2(0, speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //    //vflipped = true;
+            //}
 
             #endregion
 
-            playerPosition += Direction;
+            if (moving)
+            {
+                // Update animation timer
+                animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                bool isInRange = animationIndex >= currentIndexRange.Item1 && animationIndex <= currentIndexRange.Item2;
+                if (!isInRange)
+                {
+                    animationIndex = currentIndexRange.Item1;
+                }
+
+                // Update animation frame
+                if (animationTimer > 0.25f)
+                {
+                    animationIndex++;
+                    if (animationIndex > currentIndexRange.Item2) animationIndex = currentIndexRange.Item1;
+                    animationTimer -= 0.25f;
+                }
+            }
+
+            if (moving)
+            {
+                playerPosition += Vector2.Normalize(Direction) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
             // Update the bounds to sync with position of the sprite
             bounds.X = playerPosition.X;
             bounds.Y = playerPosition.Y;
+            bounds.Width = (currentIndexRange == forwardIndexRange || currentIndexRange == backwardIndexRange) ? (44 * playerScale) : (22 * playerScale);
+            bounds.Height = (currentIndexRange == forwardIndexRange || currentIndexRange == backwardIndexRange) ? (22 * playerScale) : (44 * playerScale);
         }
 
         /// <summary>
@@ -126,8 +235,13 @@ namespace Thief_Repo_Man
         /// <param name="content">The ContentManager to load with</param>
         public void LoadContent(ContentManager content)
         {
+            // idle texture
             playerTexture = content.Load<Texture2D>("player(drawn)");
+            forwardLTexture = content.Load<Texture2D>("walking (forwardL)");
+            forwardRTexture = content.Load<Texture2D>("walking (forwardR)");
             playerLeftTexture = content.Load<Texture2D>("player_left");
+            leftLTexture = content.Load<Texture2D>("walking (leftL)");
+            leftRTexture = content.Load<Texture2D>("walking (leftR)");
         }
 
         /// <summary>
@@ -139,11 +253,54 @@ namespace Thief_Repo_Man
         {
             SpriteEffects spriteEffects = SpriteEffects.None;
 
-            if (vflipped && hflipped)
+            //if (vflipped && hflipped)
+            //{
+            //    spriteEffects = SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally;
+            //}
+
+            if (moving)
             {
-                spriteEffects = SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally;
+                vflipped = false;
+                hflipped = false;
+
+                switch (animationIndex)
+                {
+                    case (int)WalkingTexture.ForwardL:
+                        vflipped = false;
+                        texture = forwardLTexture;
+                        break;
+                    case (int)WalkingTexture.ForwardR:
+                        vflipped = false;
+                        texture = forwardRTexture;
+                        break;
+                    case (int)WalkingTexture.LeftL:
+                        hflipped = false;
+                        texture = leftLTexture;
+                        break;
+                    case (int)WalkingTexture.LeftR:
+                        hflipped = false;
+                        texture = leftRTexture;
+                        break;
+                    case (int)WalkingTexture.RightL:
+                        hflipped = true;
+                        texture = leftLTexture;
+                        break;
+                    case (int)WalkingTexture.RightR:
+                        hflipped = true;
+                        texture = leftRTexture;
+                        break;
+                    case (int)WalkingTexture.BackwardL:
+                        vflipped = true;
+                        texture = forwardLTexture;
+                        break;
+                    case (int)WalkingTexture.BackwardR:
+                        vflipped = true;
+                        texture = forwardRTexture;
+                        break;
+                }
             }
-            else if (vflipped)
+
+            if (vflipped)
             {
                 spriteEffects = SpriteEffects.FlipVertically;
             }
@@ -151,6 +308,10 @@ namespace Thief_Repo_Man
             {
                 spriteEffects = SpriteEffects.FlipHorizontally;
             }
+
+            //// Draw bat sprite
+            //var source = new Rectangle(animationIndex * 32, (int)Direction * 32, 32, 32);
+            //spriteBatch.Draw(texture, Position, source, Color.White);
 
             //SpriteEffects spriteEffects = (vflipped) ? SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally : SpriteEffects.None;
             spriteBatch.Draw(
@@ -160,13 +321,13 @@ namespace Thief_Repo_Man
                 Color.White,
                 0f,
                 Vector2.Zero,
-                1.5f,
+                playerScale,
                 spriteEffects,
                 0f
             );
             //// Debug size of collider
             //var rect = new Rectangle((int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
-            //spriteBatch.Draw(playerTexture, rect, Color.Red);
+            //spriteBatch.Draw(texture, rect, Color.Red);
 
             //spriteBatch.Draw(playerTexture, new Vector2(bounds.X, bounds.Y), Color.Red);
             //spriteBatch.Draw(playerTexture, playerPosition, null, Color.White, 0, new Vector2(64, 64), 0.25f, spriteEffects, 0);

@@ -22,7 +22,7 @@ namespace Thief_Repo_Man
         public Car(Vector2 position)
         {
             this.carPosition = position;
-            this.bounds = new BoundingRectangle(carPosition, 114, 114);
+            this.bounds = new BoundingRectangle(carPosition, 105, 67);
         }
 
         /// <summary>

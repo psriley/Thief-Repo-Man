@@ -46,3 +46,5 @@ C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bi
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\rubik.xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (forwardL).xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (forwardR).xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (leftR).xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (leftL).xnb
