@@ -256,14 +256,14 @@ namespace Thief_Repo_Man
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(
-                notepadBackground, 
+                notepadBackground,
                 centerScreenPosition,
                 null,
                 Color.White,
                 0f,
-                new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2), 
-                1f, 
-                SpriteEffects.None, 
+                new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2),
+                1f,
+                SpriteEffects.None,
                 0f
             );
             //_spriteBatch.Draw(
