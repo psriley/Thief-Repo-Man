@@ -49,7 +49,7 @@ namespace Thief_Repo_Man.Screens
         public override void Activate()
         {
             var content = ScreenManager.Game.Content;
-                _gradientTexture = content.Load<Texture2D>("gradient");
+                //_gradientTexture = content.Load<Texture2D>("indication_arrow");
         }
 
         public override void HandleInput(GameTime gameTime, InputState input)
@@ -98,7 +98,7 @@ namespace Thief_Repo_Man.Screens
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(_gradientTexture, backgroundRectangle, color);
+            //spriteBatch.Draw(null, backgroundRectangle, color);
             spriteBatch.DrawString(font, _message, textPosition, color);
 
             spriteBatch.End();

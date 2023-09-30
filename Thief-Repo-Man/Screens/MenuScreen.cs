@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Thief_Repo_Man.StateManagement;
@@ -11,6 +13,8 @@ namespace Thief_Repo_Man.Screens
     // move up and down to select an entry, or cancel to back out of the screen.
     public abstract class MenuScreen : GameScreen
     {
+        private ContentManager _content;
+
         private readonly List<MenuEntry> _menuEntries = new List<MenuEntry>();
         private int _selectedEntry;
         private readonly string _menuTitle;
@@ -19,6 +23,8 @@ namespace Thief_Repo_Man.Screens
         private readonly InputAction _menuDown;
         private readonly InputAction _menuSelect;
         private readonly InputAction _menuCancel;
+
+        private SoundEffect blip;
 
         // Gets the list of menu entries, so derived classes can add or change the menu contents.
         protected IList<MenuEntry> MenuEntries => _menuEntries;
@@ -44,6 +50,14 @@ namespace Thief_Repo_Man.Screens
                 new[] { Keys.Back, Keys.Escape }, true);
         }
 
+        public override void Activate()
+        {
+            if (_content == null)
+                _content = new ContentManager(ScreenManager.Game.Services, "Content");
+
+            blip = _content.Load<SoundEffect>("blip");
+        }
+
         // Responds to user input, changing the selected entry and accepting or cancelling the menu.
         public override void HandleInput(GameTime gameTime, InputState input)
         {
@@ -56,6 +70,7 @@ namespace Thief_Repo_Man.Screens
 
             if (_menuUp.Occurred(input, ControllingPlayer, out playerIndex))
             {
+                blip.Play();
                 _selectedEntry--;
 
                 if (_selectedEntry < 0)
@@ -64,6 +79,7 @@ namespace Thief_Repo_Man.Screens
 
             if (_menuDown.Occurred(input, ControllingPlayer, out playerIndex))
             {
+                blip.Play();
                 _selectedEntry++;
 
                 if (_selectedEntry >= _menuEntries.Count)

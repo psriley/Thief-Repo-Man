@@ -72,8 +72,8 @@ namespace Thief_Repo_Man
             Keys.Right,
         };
 
-        private Texture2D texture;
         private Texture2D playerTexture;
+        private Texture2D idleTexture;
         private Texture2D forwardLTexture;
         private Texture2D forwardRTexture;
         private Texture2D playerLeftTexture;
@@ -97,12 +97,7 @@ namespace Thief_Repo_Man
             _direction = -Vector2.UnitY;
         }
 
-        public void HandleInput(GameTime gt, KeyboardState ks)
-        {
-            Update(gt, ks);
-        }
-
-        public void Update(GameTime gameTime, KeyboardState currentKeyboardState)
+        public void HandleInput(GameTime gameTime, KeyboardState currentKeyboardState)
         {
             #region Direction input
 
@@ -130,11 +125,11 @@ namespace Thief_Repo_Man
 
                 if (_direction == Vector2.UnitX || _direction == -Vector2.UnitX)
                 {
-                    texture = playerLeftTexture;
+                    playerTexture = playerLeftTexture;
                 }
                 else if (_direction == Vector2.UnitY || _direction == -Vector2.UnitY)
                 {
-                    texture = playerTexture;
+                    playerTexture = idleTexture;
                 }
             }
 
@@ -206,6 +201,10 @@ namespace Thief_Repo_Man
             bounds.Height = (currentIndexRange == forwardIndexRange || currentIndexRange == backwardIndexRange) ? (22 * playerScale) : (44 * playerScale);
         }
 
+        public void Update(GameTime gameTime, KeyboardState currentKeyboardState)
+        {
+        }
+
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
         /// </summary>
@@ -213,12 +212,15 @@ namespace Thief_Repo_Man
         public void LoadContent(ContentManager content)
         {
             // idle texture
-            playerTexture = content.Load<Texture2D>("player(drawn)");
+            idleTexture = content.Load<Texture2D>("player(drawn)");
             forwardLTexture = content.Load<Texture2D>("walking (forwardL)");
             forwardRTexture = content.Load<Texture2D>("walking (forwardR)");
             playerLeftTexture = content.Load<Texture2D>("player_left");
             leftLTexture = content.Load<Texture2D>("walking (leftL)");
             leftRTexture = content.Load<Texture2D>("walking (leftR)");
+
+            // initialize player texture
+            playerTexture = idleTexture;
         }
 
         /// <summary>
@@ -234,6 +236,7 @@ namespace Thief_Repo_Man
             //{
             //    spriteEffects = SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally;
             //}
+            playerTexture = idleTexture;
 
             if (moving)
             {
@@ -244,35 +247,35 @@ namespace Thief_Repo_Man
                 {
                     case (int)WalkingTexture.ForwardL:
                         vflipped = false;
-                        texture = forwardLTexture;
+                        playerTexture = forwardLTexture;
                         break;
                     case (int)WalkingTexture.ForwardR:
                         vflipped = false;
-                        texture = forwardRTexture;
+                        playerTexture = forwardRTexture;
                         break;
                     case (int)WalkingTexture.LeftL:
                         hflipped = false;
-                        texture = leftLTexture;
+                        playerTexture = leftLTexture;
                         break;
                     case (int)WalkingTexture.LeftR:
                         hflipped = false;
-                        texture = leftRTexture;
+                        playerTexture = leftRTexture;
                         break;
                     case (int)WalkingTexture.RightL:
                         hflipped = true;
-                        texture = leftLTexture;
+                        playerTexture = leftLTexture;
                         break;
                     case (int)WalkingTexture.RightR:
                         hflipped = true;
-                        texture = leftRTexture;
+                        playerTexture = leftRTexture;
                         break;
                     case (int)WalkingTexture.BackwardL:
                         vflipped = true;
-                        texture = forwardLTexture;
+                        playerTexture = forwardLTexture;
                         break;
                     case (int)WalkingTexture.BackwardR:
                         vflipped = true;
-                        texture = forwardRTexture;
+                        playerTexture = forwardRTexture;
                         break;
                 }
             }
@@ -292,7 +295,7 @@ namespace Thief_Repo_Man
 
             //SpriteEffects spriteEffects = (vflipped) ? SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally : SpriteEffects.None;
             spriteBatch.Draw(
-                texture,
+                playerTexture,
                 playerPosition,
                 null,
                 Color.White,

@@ -48,3 +48,8 @@ C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bi
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (forwardR).xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (leftR).xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\walking (leftL).xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\city_background.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\car_start.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\moving_slowly.wma
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\moving_slowly.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\blip.xnb

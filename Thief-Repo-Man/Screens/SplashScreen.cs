@@ -22,7 +22,7 @@ namespace Thief_Repo_Man.Screens
 
             if (_content == null) _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _background = _content.Load<Texture2D>("title_screen");
+            _background = _content.Load<Texture2D>("city_background");
             _displayTime = TimeSpan.FromSeconds(2);
         }
 

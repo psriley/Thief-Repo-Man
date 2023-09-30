@@ -56,6 +56,11 @@ namespace Thief_Repo_Man
             currentMode = newMode;
         }
 
+        public void HandleInput(GameTime gt, KeyboardState ks)
+        {
+            Update(gt, ks);
+        }
+
         /// <summary>
         /// Set the direction based off of the keys that the player presses.
         /// </summary>

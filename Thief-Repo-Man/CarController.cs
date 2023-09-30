@@ -48,9 +48,45 @@ namespace Thief_Repo_Man
             _direction = -Vector2.UnitY;
         }
 
-        public void HandleInput(GameTime gt, KeyboardState ks)
+        public void HandleInput(GameTime gameTime, KeyboardState keyboardState)
         {
-            Update(gt, ks);
+            float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Vector2 acceleration = new Vector2(0, 0);
+            float angularAcceleration = 0;
+            if (keyboardState.IsKeyDown(Keys.A))
+            {
+                acceleration += direction * LINEAR_ACCELERATION;
+                angularAcceleration += ANGULAR_ACCELERATION;
+            }
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                acceleration += direction * LINEAR_ACCELERATION;
+                angularAcceleration -= ANGULAR_ACCELERATION;
+            }
+            if (keyboardState.IsKeyDown(Keys.W))
+            {
+                acceleration += direction * LINEAR_ACCELERATION;
+            }
+            if (keyboardState.IsKeyDown(Keys.S))
+            {
+                acceleration -= direction * LINEAR_ACCELERATION;
+            }
+            //if (acceleration.Length() > 0)
+            //{
+            //    acceleration -= direction * LINEAR_ACCELERATION;
+            //    velocity -= acceleration * t;
+            //}
+
+            angularVelocity += angularAcceleration * t;
+            angle += angularVelocity * t;
+            direction.X = (float)Math.Sin(angle - 90);
+            direction.Y = (float)-Math.Cos(angle - 90);
+
+            velocity += acceleration * t;
+            position += velocity * t;
+
+            //Vector2.Clamp(acceleration, Vector2.Zero, Vector2.One);
         }
 
         /// <summary>
@@ -68,43 +104,7 @@ namespace Thief_Repo_Man
         /// <param name="gameTime">An object representing time in the game</param>
         public void Update(GameTime gameTime, KeyboardState keyboardState)
         {
-            float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            Vector2 acceleration = new Vector2(0, 0);
-            float angularAcceleration = 0;
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                acceleration += direction * LINEAR_ACCELERATION;
-                angularAcceleration += ANGULAR_ACCELERATION;
-            }
-            if (keyboardState.IsKeyDown(Keys.Right))
-            {
-                acceleration += direction * LINEAR_ACCELERATION;
-                angularAcceleration -= ANGULAR_ACCELERATION;
-            }
-            if (keyboardState.IsKeyDown(Keys.Up))
-            {
-                acceleration += direction * LINEAR_ACCELERATION;
-            }
-            if (keyboardState.IsKeyDown(Keys.Down))
-            {
-                acceleration -= direction * LINEAR_ACCELERATION;
-            }
-            //if (acceleration.Length() > 0)
-            //{
-            //    acceleration -= direction * LINEAR_ACCELERATION;
-            //    velocity -= acceleration * t;
-            //}
-
-            angularVelocity += angularAcceleration * t;
-            angle += angularVelocity * t;
-            direction.X = (float)Math.Sin(angle - 90);
-            direction.Y = (float)-Math.Cos(angle -90);
-
-            velocity += acceleration * t;
-            position += velocity * t;
-
-            //Vector2.Clamp(acceleration, Vector2.Zero, Vector2.One);
+            
         }
 
         /// <summary>
