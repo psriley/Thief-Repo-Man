@@ -27,6 +27,11 @@ namespace Thief_Repo_Man.Screens
         private ContentManager _content;
         private SpriteFont _gameFont;
 
+        /// <summary>
+        /// Vector from the player to the origin of the screen.
+        /// </summary>
+        private Vector2 _playerOffset = new Vector2(-100, 100);
+
         private Vector2 _playerPosition = new Vector2(100, 100);
         private Vector2 _enemyPosition = new Vector2(100, 100);
 
@@ -278,6 +283,16 @@ namespace Thief_Repo_Man.Screens
 
         public override void Draw(GameTime gameTime)
         {
+            Matrix transform = Matrix.Identity;
+            if (inCar)
+            {
+                // Player-synced scrolling
+                Vector2 offset = new Vector2(640 - playerInput.carController.position.X, 360 - playerInput.carController.position.Y);
+
+                // Create the translation matrix representing the offset
+                transform = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+            }
+
             // This game has a blue background. Why? Because!
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0, 0);
 
@@ -285,8 +300,9 @@ namespace Thief_Repo_Man.Screens
             var spriteBatch = ScreenManager.SpriteBatch;
 
             Color color = canExit ? Color.Red : Color.Gold;
-
-            spriteBatch.Begin();
+                
+            // Draw the transformed game world
+            spriteBatch.Begin(transformMatrix: transform);
 
             //spriteBatch.DrawString(_gameFont, "// TODO", _playerPosition, Color.Green);
             //spriteBatch.DrawString(_gameFont, "Insert Gameplay Here",

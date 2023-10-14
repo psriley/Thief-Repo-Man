@@ -30,7 +30,7 @@ namespace Thief_Repo_Man
         /// </summary>
         public static Vector2 Direction => _direction;
 
-        private Vector2 playerPosition;
+        public Vector2 startingCarPosition;
         private float speed = 200f;
         private BoundingRectangle bounds;
         private float playerScale = 1.5f;
@@ -44,7 +44,7 @@ namespace Thief_Repo_Man
 
         Game game;
         Texture2D texture;
-        Vector2 position;
+        public Vector2 position;
         Vector2 velocity;
         Vector2 direction;
 
@@ -54,7 +54,7 @@ namespace Thief_Repo_Man
         public CarController(Vector2 position)
         {
             this.position = new Vector2(526, 356);
-            this.bounds = new BoundingRectangle(playerPosition, (44 * playerScale), (22 * playerScale));
+            this.bounds = new BoundingRectangle(startingCarPosition, (44 * playerScale), (22 * playerScale));
             _direction = -Vector2.UnitY;
             angle = (float)Math.PI;
             direction.X = (float)Math.Cos(angle);
@@ -90,6 +90,10 @@ namespace Thief_Repo_Man
             {
                 velocity += direction * speed;
                 //acceleration -= direction * (LINEAR_ACCELERATION * 2);
+            }
+            if (keyboardState.IsKeyDown(Keys.Space))
+            {
+                velocity = Vector2.Zero;
             }
 
             //if (velocity.Length() > 0f)

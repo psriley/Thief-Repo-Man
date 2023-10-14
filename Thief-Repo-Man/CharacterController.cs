@@ -81,7 +81,7 @@ namespace Thief_Repo_Man
         private Texture2D leftRTexture;
         private bool moving;
 
-        private Vector2 playerPosition;
+        public Vector2 playerPosition;
         private float speed = 200f;
         private BoundingRectangle bounds;
         private float playerScale = 1.5f;
