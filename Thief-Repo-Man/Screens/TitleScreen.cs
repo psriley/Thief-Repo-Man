@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using SharpDX.Direct2D1;
+using Thief_Repo_Man.Particle_System.Systems;
 using Thief_Repo_Man.StateManagement;
 
 namespace Thief_Repo_Man.Screens
@@ -147,6 +148,10 @@ namespace Thief_Repo_Man.Screens
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
             ScreenManager.Game.ResetElapsedTime();
+
+            SmokeParticleSystem smoke = new SmokeParticleSystem(ScreenManager.Game, playerInput.carController);
+
+            ScreenManager.Game.Components.Add(smoke);
         }
 
         public override void Deactivate()
@@ -287,7 +292,7 @@ namespace Thief_Repo_Man.Screens
             if (inCar)
             {
                 // Player-synced scrolling
-                Vector2 offset = new Vector2(640 - playerInput.carController.position.X, 360 - playerInput.carController.position.Y);
+                Vector2 offset = new Vector2(640 - playerInput.carController.Position.X, 360 - playerInput.carController.Position.Y);
 
                 // Create the translation matrix representing the offset
                 transform = Matrix.CreateTranslation(offset.X, offset.Y, 0);

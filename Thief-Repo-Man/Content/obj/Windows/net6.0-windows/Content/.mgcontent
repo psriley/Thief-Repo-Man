@@ -8,12 +8,14 @@
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/../../../GameArt/player(drawn).png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/blip.wav</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/car_start.wav</File>
+    <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/circle.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/city_background.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/gaegu.spritefont</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/indication_arrow.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/inkFree.spritefont</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/moving_slowly.mp3</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/notepad.png</File>
+    <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/particle.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/rubik.spritefont</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/smaller_background.png</File>
     <File>C:/Users/peyto/source/repos/CIS580/GameProjects/game-project-0/Thief-Repo-Man/Content/walking (forwardL).png</File>
@@ -25,6 +27,8 @@
   <DestFiles>
     <File>car.png</File>
     <File>player(drawn).png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

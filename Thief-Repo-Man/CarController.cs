@@ -11,10 +11,11 @@ using System.Diagnostics;
 using SharpDX.Direct3D9;
 using Microsoft.Xna.Framework.Content;
 using Thief_Repo_Man.Collisions;
+using Thief_Repo_Man.Particle_System;
 
 namespace Thief_Repo_Man
 {
-    public class CarController
+    public class CarController : IParticleEmitter
     {
         private float accelerationSpeed = 30.0f;
         private float turnSpeed = 3.5f;
@@ -44,22 +45,23 @@ namespace Thief_Repo_Man
 
         Game game;
         Texture2D texture;
-        public Vector2 position;
-        Vector2 velocity;
+        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
         Vector2 direction;
 
-        float angle;
+        public float Rotation { get; set; }
         float angularVelocity;
 
         public CarController(Vector2 position)
         {
-            this.position = new Vector2(526, 356);
+            this.Position = new Vector2(526, 356);
+            //this.Position = position;
             this.bounds = new BoundingRectangle(startingCarPosition, (44 * playerScale), (22 * playerScale));
             _direction = -Vector2.UnitY;
-            angle = (float)Math.PI;
-            direction.X = (float)Math.Cos(angle);
-            direction.Y = (float)Math.Sin(angle);
-            Debug.WriteLine($"Initial angle: {angle}");
+            Rotation = (float)Math.PI;
+            direction.X = (float)Math.Cos(Rotation);
+            direction.Y = (float)Math.Sin(Rotation);
+            Debug.WriteLine($"Initial rotation: {Rotation}");
             Debug.WriteLine($"Initial direction: {direction}");
         }
 
@@ -71,29 +73,29 @@ namespace Thief_Repo_Man
             float angularAcceleration = 0;
             if (keyboardState.IsKeyDown(Keys.A))
             {
-                angle -= 0.1f;
+                Rotation -= 0.1f;
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration += ANGULAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                angle += 0.1f;
+                Rotation += 0.1f;
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration -= ANGULAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                velocity -= direction * speed;
+                Velocity -= direction * speed;
                 //acceleration += direction * LINEAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                velocity += direction * speed;
+                Velocity += direction * speed;
                 //acceleration -= direction * (LINEAR_ACCELERATION * 2);
             }
             if (keyboardState.IsKeyDown(Keys.Space))
             {
-                velocity = Vector2.Zero;
+                Velocity = Vector2.Zero;
             }
 
             //if (velocity.Length() > 0f)
@@ -108,12 +110,12 @@ namespace Thief_Repo_Man
 
             //angularVelocity += angularAcceleration * t;
             //angle += angularVelocity * t;
-            direction.X = (float)Math.Cos(angle);
-            direction.Y = (float)Math.Sin(angle);
+            direction.X = (float)Math.Cos(Rotation);
+            direction.Y = (float)Math.Sin(Rotation);
             direction.Normalize();
 
             //velocity += acceleration * t;
-            position += velocity * t;
+            Position += Velocity * t;
 
             speed = MathHelper.Clamp(speed, 0.0f, MAX_SPEED);
 
@@ -126,7 +128,7 @@ namespace Thief_Repo_Man
         void ApplyEngineForce()
         {
             // Create a force for the engine
-            Vector2 engineForceVector = new Vector2((float)Math.Sin(angle - 90), 0);
+            Vector2 engineForceVector = new Vector2((float)Math.Sin(Rotation - 90), 0);
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace Thief_Repo_Man
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, angle, new Vector2((105/2), (67/2)), 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, Position, null, Color.White, Rotation, new Vector2((105/2), (67/2)), 1f, SpriteEffects.None, 0);
         }
     }
 }

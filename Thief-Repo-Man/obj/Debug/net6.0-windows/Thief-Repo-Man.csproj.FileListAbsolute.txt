@@ -53,3 +53,5 @@ C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bi
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\moving_slowly.wma
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\moving_slowly.xnb
 C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\blip.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\circle.xnb
+C:\Users\peyto\source\repos\CIS580\GameProjects\game-project-0\Thief-Repo-Man\bin\Debug\net6.0-windows\Content\particle.xnb
