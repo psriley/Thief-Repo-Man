@@ -1,0 +1,10 @@
+1. Notepad | Free SVG ('notepad.png' in Content) by OpenClipart 
+(found on freesvg.org: https://freesvg.org/notepad-page) with public domain license
+2. 'Car Start' by snakebarney (found on freesound.org: https://freesound.org/people/snakebarney/sounds/138099/) with
+Creative Commons 0 license (https://creativecommons.org/publicdomain/zero/1.0/)
+Car start sound effect played when player enter vehicle ('car_start' in Content)
+	- This was originally an .aiff file, but I converted it with convertio.co to a .wav file
+3. 'Moving Slowly (80s Retro Music)' by Music_Unlimited
+(found on pixabay.com: https://pixabay.com) with royalty free license (https://pixabay.com/service/terms/)
+4. 'Pico-8 City' by Kenney
+(foudn on opengameart.org: https://opengameart.org/content/pico-8-city) with public domain license (https://creativecommons.org/publicdomain/zero/1.0/)
