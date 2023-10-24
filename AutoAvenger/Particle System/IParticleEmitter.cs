@@ -9,10 +9,10 @@ namespace AutoAvenger.Particle_System
 {
     public interface IParticleEmitter
     {
-        public Vector2 Position { get; }
+        public Vector2 EmitterPosition { get; }
         
-        public Vector2 Velocity { get; }
+        public Vector2 EmitterVelocity { get; }
 
-        public float Rotation { get; }
+        public float EmitterRotation { get; }
     }
 }

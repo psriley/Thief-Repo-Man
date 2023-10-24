@@ -73,6 +73,7 @@ namespace AutoAvenger
         };
 
         private Texture2D playerTexture;
+        private Texture2D priorPlayerTexture;
         private Texture2D idleTexture;
         private Texture2D forwardLTexture;
         private Texture2D forwardRTexture;
@@ -201,10 +202,6 @@ namespace AutoAvenger
             bounds.Height = (currentIndexRange == forwardIndexRange || currentIndexRange == backwardIndexRange) ? (22 * playerScale) : (44 * playerScale);
         }
 
-        public void Update(GameTime gameTime, KeyboardState currentKeyboardState)
-        {
-        }
-
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
         /// </summary>
@@ -231,12 +228,32 @@ namespace AutoAvenger
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             SpriteEffects spriteEffects = SpriteEffects.None;
+            //float rotation = 90;
 
             //if (vflipped && hflipped)
             //{
             //    spriteEffects = SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally;
+
             //}
-            playerTexture = idleTexture;
+            //if (!moving)
+            //{
+            //    playerTexture = idleTexture;
+
+            //    // Calculate the angle of rotation in radians
+            //    rotation = (float)Math.Atan2(_direction.Y, _direction.X);
+
+            //    // Convert the angle to degrees
+            //    rotation = MathHelper.ToDegrees(rotation);
+
+            //    // Make sure the angle is in the range [0, 360)
+            //    if (rotation < 0)
+            //    {
+            //        rotation += 360;
+            //    }
+            //    //rotation = _direction;
+            //}
+
+            //playerTexture = priorPlayerTexture;
 
             if (moving)
             {

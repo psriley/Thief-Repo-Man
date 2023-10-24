@@ -45,9 +45,9 @@ namespace AutoAvenger.Particle_System.Systems
 
         protected override void InitializeParticle(ref Particle p, Vector2 where)
         {
-            var velocity = _emitter.Velocity;
+            var velocity = _emitter.EmitterVelocity;
 
-            var rotation = _emitter.Rotation;
+            var rotation = _emitter.EmitterRotation;
 
             var acceleration = new Vector2(RandomHelper.NextFloat(0.5f, 1f), RandomHelper.NextFloat(-0.5f, 0.5f)) * 75;
 
@@ -64,7 +64,7 @@ namespace AutoAvenger.Particle_System.Systems
         {
             base.Update(gameTime);
 
-            if (IsIdling) AddParticles(_emitter.Position);
+            if (IsIdling) AddParticles(_emitter.EmitterPosition);
         }
 
         //Rectangle _source;

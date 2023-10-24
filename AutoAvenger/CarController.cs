@@ -17,85 +17,102 @@ namespace AutoAvenger
 {
     public class CarController : IParticleEmitter
     {
-        private float accelerationSpeed = 30.0f;
-        private float turnSpeed = 3.5f;
-
-        float acceleration = 0;
-        float steering = 0;
-
-        float rotationAngle = 0;
-
-        private static Vector2 _direction;
-        /// <summary>
-        /// Direction that the player is facing.
-        /// </summary>
-        public static Vector2 Direction => _direction;
-
-        public Vector2 startingCarPosition;
-        private float speed = 200f;
-        private BoundingRectangle bounds;
-        private float playerScale = 1.5f;
-        private float rotation = 0;
-
-        public BoundingRectangle Bounds => bounds;
-
         const float LINEAR_ACCELERATION = 100;
         const float ANGULAR_ACCELERATION = 2;
         const float MAX_SPEED = 5;
 
+        //private float accelerationSpeed = 30.0f;
+        //private float turnSpeed = 3.5f;
+
+        //float acceleration = 0;
+        //float steering = 0;
+
+        //float rotationAngle = 0;
+        //float angularVelocity;
+
+        private static Vector2 _direction;
+        /// <summary>
+        /// Direction that the player's car is facing.
+        /// </summary>
+        public static Vector2 Direction => _direction;
+
+        private Vector2 _position;
+        /// <summary>
+        /// Position of the player's car.
+        /// </summary>
+        public Vector2 Position => _position;
+
+        private BoundingRectangle _bounds;
+        /// <summary>
+        /// The bounds for the player's car.
+        /// </summary>
+        public BoundingRectangle Bounds => _bounds;
+
+        private float _speed = 200f;
+        private float _playerScale = 1.5f;
+        private float _rotation = 0;
+        private Vector2 _velocity;
+
         Game game;
         Texture2D texture;
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
-        Vector2 direction;
 
-        public float Rotation { get; set; }
-        float angularVelocity;
+        // particle emitter variables
+        public Vector2 EmitterPosition { get; set; }
+        public Vector2 EmitterVelocity { get; set; }
+        public float EmitterRotation { get; set; }
+
+        private Vector2 _emitterOffset = new Vector2(526, 356);
 
         public CarController(Vector2 position)
         {
-            this.Position = new Vector2(526, 356);
-            //this.Position = position;
-            this.bounds = new BoundingRectangle(startingCarPosition, (44 * playerScale), (22 * playerScale));
+            _position = position;
+            _bounds = new BoundingRectangle(_position, (44 * _playerScale), (22 * _playerScale));
             _direction = -Vector2.UnitY;
-            Rotation = (float)Math.PI;
-            direction.X = (float)Math.Cos(Rotation);
-            direction.Y = (float)Math.Sin(Rotation);
-            Debug.WriteLine($"Initial rotation: {Rotation}");
-            Debug.WriteLine($"Initial direction: {direction}");
+            _rotation = (float)Math.PI;
+            _direction.X = (float)Math.Cos(_rotation);
+            _direction.Y = (float)Math.Sin(_rotation);
+            _velocity = Vector2.Zero;
+            Debug.WriteLine($"Initial rotation: {_rotation}");
+            Debug.WriteLine($"Initial direction: {_direction}");
+
+            // set emitter properties
+            EmitterPosition = position + _emitterOffset;
+            EmitterRotation = _rotation;
+            EmitterVelocity = _velocity;
         }
 
         public void HandleInput(GameTime gameTime, KeyboardState keyboardState)
         {
             float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            Vector2 acceleration = new Vector2(0, 0);
-            float angularAcceleration = 0;
+            //Vector2 acceleration = new Vector2(0, 0);
+            //float angularAcceleration = 0;
+
             if (keyboardState.IsKeyDown(Keys.A))
             {
-                Rotation -= 0.1f;
+                _rotation -= 0.1f;
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration += ANGULAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                Rotation += 0.1f;
+                _rotation += 0.1f;
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration -= ANGULAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                Velocity -= direction * speed;
+                _velocity -= _direction * _speed;
                 //acceleration += direction * LINEAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                Velocity += direction * speed;
+                _velocity += _direction * _speed;
                 //acceleration -= direction * (LINEAR_ACCELERATION * 2);
             }
             if (keyboardState.IsKeyDown(Keys.Space))
             {
-                Velocity = Vector2.Zero;
+                _velocity = Vector2.Zero;
             }
 
             //if (velocity.Length() > 0f)
@@ -110,26 +127,32 @@ namespace AutoAvenger
 
             //angularVelocity += angularAcceleration * t;
             //angle += angularVelocity * t;
-            direction.X = (float)Math.Cos(Rotation);
-            direction.Y = (float)Math.Sin(Rotation);
-            direction.Normalize();
+            _direction.X = (float)Math.Cos(_rotation);
+            _direction.Y = (float)Math.Sin(_rotation);
+            // prevent diagonal movement from being faster than other movement.
+            _direction.Normalize();
 
             //velocity += acceleration * t;
-            Position += Velocity * t;
+            ////Position += Velocity * t;
+            _position += _velocity * t;
 
-            speed = MathHelper.Clamp(speed, 0.0f, MAX_SPEED);
+            // clamp the speed of the car so it never exceeds the set max speed.
+            _speed = MathHelper.Clamp(_speed, 0.0f, MAX_SPEED);
 
-            ApplyEngineForce();
+            //ApplyEngineForce();
             //ApplySteering();
 
             //Vector2.Clamp(acceleration, Vector2.Zero, Vector2.One);
+
+            // sync particle system with player's car.
+            //EmitterPosition = _position + offset;
         }
 
-        void ApplyEngineForce()
-        {
-            // Create a force for the engine
-            Vector2 engineForceVector = new Vector2((float)Math.Sin(Rotation - 90), 0);
-        }
+        //void ApplyEngineForce()
+        //{
+        //    // Create a force for the engine
+        //    Vector2 engineForceVector = new Vector2((float)Math.Sin(_rotation - 90), 0);
+        //}
 
         /// <summary>
         /// Loads the sprite texture
@@ -156,7 +179,7 @@ namespace AutoAvenger
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, null, Color.White, Rotation, new Vector2((105/2), (67/2)), 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, _position, null, Color.White, _rotation, new Vector2((105/2), (67/2)), 1f, SpriteEffects.None, 0);
         }
     }
 }
