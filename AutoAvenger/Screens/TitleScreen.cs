@@ -129,7 +129,7 @@ namespace AutoAvenger.Screens
 
             //player = new CharacterController(playerPosition);
             playerInput = new PlayerInput(playerPosition);
-            car1 = new Car(car1Position);
+            car1 = new Car(car1Position, true);
 
             //player.LoadContent(Content);
             playerInput.LoadContent(_content);
@@ -270,6 +270,8 @@ namespace AutoAvenger.Screens
 
                     if (canExit && keyboardState.IsKeyDown(Keys.E) || gamePadState.Buttons.A == ButtonState.Pressed)
                     {
+                        playerInput.carController.SetCarToControl(car1);
+                        //playerInput.carController.car = car1;
                         //Exit();
                         // TODO: play car ignition sound effect
                         carStart.Play();

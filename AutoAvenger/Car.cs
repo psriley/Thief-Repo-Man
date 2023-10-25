@@ -16,13 +16,19 @@ namespace AutoAvenger
         private Vector2 carPosition;
         private Texture2D carTexture;
         private BoundingRectangle bounds;
+        private bool drivable;
+
+        public Vector2 CarPosition => carPosition;
 
         public BoundingRectangle Bounds => bounds;
+
+        public bool Drivable => drivable;
         
-        public Car(Vector2 position)
+        public Car(Vector2 position, bool canBeDriven)
         {
             this.carPosition = position;
             this.bounds = new BoundingRectangle(carPosition, 105, 67);
+            this.drivable = canBeDriven;
         }
 
         /// <summary>

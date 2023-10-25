@@ -48,6 +48,11 @@ namespace AutoAvenger
         /// </summary>
         public BoundingRectangle Bounds => _bounds;
 
+        /// <summary>
+        /// The car that this controller is controlling.
+        /// </summary>
+        public Car car;
+
         private float _speed = 200f;
         private float _playerScale = 1.5f;
         private float _rotation = 0;
@@ -61,22 +66,38 @@ namespace AutoAvenger
         public Vector2 EmitterVelocity { get; set; }
         public float EmitterRotation { get; set; }
 
-        private Vector2 _emitterOffset = new Vector2(526, 356);
+        //private Vector2 _emitterOffset = new Vector2(526, 356);
 
-        public CarController(Vector2 position)
+        public CarController()
         {
-            _position = position;
-            _bounds = new BoundingRectangle(_position, (44 * _playerScale), (22 * _playerScale));
+            //this.car = car;
+            //_position = car.CarPosition;
+            //_bounds = car.Bounds;
+            _rotation = (float)Math.PI;
             _direction = -Vector2.UnitY;
             _rotation = (float)Math.PI;
             _direction.X = (float)Math.Cos(_rotation);
             _direction.Y = (float)Math.Sin(_rotation);
             _velocity = Vector2.Zero;
+            //_position = position;
+            //_bounds = new BoundingRectangle(_position, (44 * _playerScale), (22 * _playerScale));
             Debug.WriteLine($"Initial rotation: {_rotation}");
             Debug.WriteLine($"Initial direction: {_direction}");
 
+            //// set emitter properties
+            //EmitterPosition = _position;
+            //EmitterRotation = _rotation;
+            //EmitterVelocity = _velocity;
+        }
+
+        public void SetCarToControl(Car car)
+        {
+            this.car = car;
+            _position = car.CarPosition;
+            _bounds = car.Bounds;
+
             // set emitter properties
-            EmitterPosition = position + _emitterOffset;
+            EmitterPosition = _position;
             EmitterRotation = _rotation;
             EmitterVelocity = _velocity;
         }
@@ -145,7 +166,10 @@ namespace AutoAvenger
             //Vector2.Clamp(acceleration, Vector2.Zero, Vector2.One);
 
             // sync particle system with player's car.
-            //EmitterPosition = _position + offset;
+            //EmitterPosition = _position;
+            //EmitterPosition = _position;
+            EmitterRotation = _rotation;
+            EmitterVelocity = -_velocity;
         }
 
         //void ApplyEngineForce()

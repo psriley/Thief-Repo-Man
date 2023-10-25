@@ -44,7 +44,7 @@ namespace AutoAvenger
         {
             currentMode = ControlMode.Walking; // start in walking mode
             characterController = new CharacterController(position);
-            carController = new CarController(position);
+            carController = new CarController();
         }
 
         /// <summary>
