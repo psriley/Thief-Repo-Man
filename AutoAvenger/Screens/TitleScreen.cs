@@ -253,6 +253,11 @@ namespace AutoAvenger.Screens
                     Debug.WriteLine(currentMouseState.Position);
                 }
 
+                if (keyboardState.IsKeyDown(Keys.P)) 
+                {
+                    playerInput.Score++;
+                }
+
                 #region Handling collision
 
                 // Calculate collisions if the currentMode of the player is walking.
@@ -344,6 +349,7 @@ namespace AutoAvenger.Screens
             spriteBatch.DrawString(gaegu, "Instructions: Move with 'WASD',\n interact with cars using 'E'", movementInstructionsPosition, Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", exitInstructionsPosition, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", new Vector2(exitInstructionsPosition.X - 4, exitInstructionsPosition.Y - 4), Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(gaegu, $"Score: {playerInput.Score}", Vector2.Zero, Color.Purple);
 
 
             spriteBatch.End();
