@@ -1,0 +1,12 @@
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\bin\Debug\net6.0\TilemapPipeline.deps.json
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\bin\Debug\net6.0\TilemapPipeline.dll
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\bin\Debug\net6.0\TilemapPipeline.pdb
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.csproj.AssemblyReference.cache
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.GeneratedMSBuildEditorConfig.editorconfig
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.AssemblyInfoInputs.cache
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.AssemblyInfo.cs
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.csproj.CoreCompileInputs.cache
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.dll
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\refint\TilemapPipeline.dll
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\TilemapPipeline.pdb
+E:\GitHub\Work\AutoAvenger\Thief-Repo-Man\TilemapPipeline\obj\Debug\net6.0\ref\TilemapPipeline.dll

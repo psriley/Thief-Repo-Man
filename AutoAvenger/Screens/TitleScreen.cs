@@ -87,6 +87,7 @@ namespace AutoAvenger.Screens
 
         bool canExit = false;
         bool inCar = false;
+        Tilemap _tilemap;
 
         #endregion
 
@@ -135,9 +136,11 @@ namespace AutoAvenger.Screens
             playerInput.LoadContent(_content);
             car1.LoadContent(_content);
 
-            backgroundMusic = _content.Load<Song>("moving_slowly");
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(backgroundMusic);
+            //backgroundMusic = _content.Load<Song>("moving_slowly");
+            //MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play(backgroundMusic);
+
+            _tilemap = _content.Load<Tilemap>("city");
 
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
@@ -320,18 +323,19 @@ namespace AutoAvenger.Screens
             //spriteBatch.DrawString(_gameFont, "Insert Gameplay Here",
             //                       _enemyPosition, Color.DarkRed);
 
+            _tilemap.Draw(gameTime, spriteBatch);
 
-            spriteBatch.Draw(
-                notepadBackground,
-                centerScreenPosition,
-                null,
-                Color.White,
-                0f,
-                new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2),
-                1f,
-                SpriteEffects.None,
-                0f
-            );
+            //spriteBatch.Draw(
+            //    notepadBackground,
+            //    centerScreenPosition,
+            //    null,
+            //    Color.White,
+            //    0f,
+            //    new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2),
+            //    1f,
+            //    SpriteEffects.None,
+            //    0f
+            //);
             if (!inCar)
             {
                 car1.Draw(spriteBatch);

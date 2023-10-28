@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\TilemapPipeline\bin\Debug\net6.0\TilemapPipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -60,6 +61,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:city_background.png
+
+#begin city.tmap
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/processorParam:Scale=5
+/build:city.tmap
 
 #begin gaegu.spritefont
 /importer:FontDescriptionImporter
@@ -116,6 +123,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:particle.png
+
+#begin pico-8-city.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pico-8-city.png
 
 #begin player(drawn).png
 /importer:TextureImporter
