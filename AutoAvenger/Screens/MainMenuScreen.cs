@@ -11,14 +11,17 @@ namespace AutoAvenger.Screens
             var playGameMenuEntry = new MenuEntry("Play Game");
             var optionsMenuEntry = new MenuEntry("Options");
             var exitMenuEntry = new MenuEntry("Exit");
+            var play3DSceneMenuEntry = new MenuEntry("3D Scene");
 
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
+            play3DSceneMenuEntry.Selected += Play3DSceneMenuEntrySelected;
 
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
+            MenuEntries.Add(play3DSceneMenuEntry);
         }
 
         private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -39,6 +42,11 @@ namespace AutoAvenger.Screens
             confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
 
             ScreenManager.AddScreen(confirmExitMessageBox, playerIndex);
+        }
+
+        private void Play3DSceneMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new Test3DScreen());
         }
 
         private void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)

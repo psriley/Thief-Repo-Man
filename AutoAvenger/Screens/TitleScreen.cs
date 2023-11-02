@@ -136,6 +136,7 @@ namespace AutoAvenger.Screens
             playerInput.LoadContent(_content);
             car1.LoadContent(_content);
 
+            // TODO: Turn the music back on (was getting error because of the tilemap importer? [Game Project 4])
             //backgroundMusic = _content.Load<Song>("moving_slowly");
             //MediaPlayer.IsRepeating = true;
             //MediaPlayer.Play(backgroundMusic);
