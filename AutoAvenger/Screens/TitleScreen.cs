@@ -110,7 +110,8 @@ namespace AutoAvenger.Screens
             _gameFont = _content.Load<SpriteFont>("gaegu");
 
             // TODO: use this.Content to load your game content here
-            notepadBackground = _content.Load<Texture2D>("title_screen");
+            //notepadBackground = _content.Load<Texture2D>("title_screen");
+            notepadBackground = _content.Load<Texture2D>("map1");
             indicationArrow = _content.Load<Texture2D>("indication_arrow");
 
             inkFree = _content.Load<SpriteFont>("inkFree");
@@ -326,17 +327,17 @@ namespace AutoAvenger.Screens
 
             _tilemap.Draw(gameTime, spriteBatch);
 
-            //spriteBatch.Draw(
-            //    notepadBackground,
-            //    centerScreenPosition,
-            //    null,
-            //    Color.White,
-            //    0f,
-            //    new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2),
-            //    1f,
-            //    SpriteEffects.None,
-            //    0f
-            //);
+            spriteBatch.Draw(
+                notepadBackground,
+                centerScreenPosition,
+                null,
+                Color.White,
+                0f,
+                new Vector2(notepadBackground.Width / 2, notepadBackground.Height / 2),
+                1f,
+                SpriteEffects.None,
+                0f
+            );
             if (!inCar)
             {
                 car1.Draw(spriteBatch);
