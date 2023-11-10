@@ -53,7 +53,7 @@ namespace AutoAvenger.Screens
         {
             var spriteBatch = ScreenManager.SpriteBatch;
             var viewport = ScreenManager.GraphicsDevice.Viewport;
-            var fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
+            var fullscreen = new Rectangle(-200, -100, (int)(_backgroundTexture.Width * 2f), (int)(_backgroundTexture.Height * 2f));
 
             spriteBatch.Begin();
 

@@ -24,7 +24,7 @@ namespace AutoAvenger.Screens
         private readonly InputAction _menuSelect;
         private readonly InputAction _menuCancel;
 
-        private SoundEffect blip;
+        private SoundEffectInstance blipInstance;
 
         // Gets the list of menu entries, so derived classes can add or change the menu contents.
         protected IList<MenuEntry> MenuEntries => _menuEntries;
@@ -55,7 +55,9 @@ namespace AutoAvenger.Screens
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            blip = _content.Load<SoundEffect>("blip");
+            SoundEffect blip = _content.Load<SoundEffect>("blip");
+            blipInstance = blip.CreateInstance();
+            blipInstance.Volume = 0.1f;
         }
 
         // Responds to user input, changing the selected entry and accepting or cancelling the menu.
@@ -70,7 +72,7 @@ namespace AutoAvenger.Screens
 
             if (_menuUp.Occurred(input, ControllingPlayer, out playerIndex))
             {
-                blip.Play();
+                blipInstance.Play();
                 _selectedEntry--;
 
                 if (_selectedEntry < 0)
@@ -79,7 +81,7 @@ namespace AutoAvenger.Screens
 
             if (_menuDown.Occurred(input, ControllingPlayer, out playerIndex))
             {
-                blip.Play();
+                blipInstance.Play();
                 _selectedEntry++;
 
                 if (_selectedEntry >= _menuEntries.Count)

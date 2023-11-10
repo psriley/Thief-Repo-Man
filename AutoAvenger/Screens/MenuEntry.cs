@@ -12,6 +12,7 @@ namespace AutoAvenger.Screens
     public class MenuEntry
     {
         private string _text;
+        private Color _color;
         private float _selectionFade;    // Entries transition out of the selection effect when they are deselected
         private Vector2 _position;    // This is set by the MenuScreen each frame in Update
 
@@ -33,9 +34,18 @@ namespace AutoAvenger.Screens
             Selected?.Invoke(this, new PlayerIndexEventArgs(playerIndex));
         }
 
-        public MenuEntry(string text)
+        public MenuEntry(string text, Color? color = null)
         {
             _text = text;
+            _color = color ?? Color.White;
+            //if (color == null)
+            //{
+            //    _color = Color.White;
+            //} 
+            //else
+            //{
+            //    _color = color.Value;
+            //}
         }
 
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
@@ -55,7 +65,7 @@ namespace AutoAvenger.Screens
         // This can be overridden to customize the appearance.
         public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            var color = isSelected ? Color.Yellow : Color.White;
+            var color = isSelected ? Color.Black : _color;
 
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;
