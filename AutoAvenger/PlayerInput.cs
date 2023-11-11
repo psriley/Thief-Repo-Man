@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AutoAvenger.StateManagement;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,17 +44,17 @@ namespace AutoAvenger
         public CharacterController characterController;
         public CarController carController;
 
-        public PlayerData Data;
-        public int Score;
+        private static Player _player;
+        public Player Player => _player;
 
         private KeyboardState priorKeyboardState;
-        private const string PATH = "data.json";
 
         public PlayerInput(Vector2 position)
         {
             currentMode = ControlMode.Walking; // start in walking mode
             characterController = new CharacterController(position);
             carController = new CarController();
+            _player = new Player();
         }
 
         /// <summary>
@@ -64,9 +66,22 @@ namespace AutoAvenger
             currentMode = newMode;
         }
 
-        public void HandleInput(GameTime gt, KeyboardState ks)
+        public void HandleInput(GameTime gt, KeyboardState currentKeyboardState)
         {
-            Update(gt, ks);
+            Update(gt, currentKeyboardState);
+
+            if (currentKeyboardState.IsKeyDown(Keys.F1) && !priorKeyboardState.IsKeyDown(Keys.F1))
+            {
+                _player.Data.Score = _player.Score;
+                _player.Save(_player.Data);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.P))
+            {
+                _player.Score++;
+            }
+
+            priorKeyboardState = currentKeyboardState;
         }
 
         /// <summary>
@@ -84,48 +99,14 @@ namespace AutoAvenger
                     carController.HandleInput(gameTime, currentKeyboardState);
                     break;
             }
-
-            if (currentKeyboardState.IsKeyDown(Keys.F1) && !priorKeyboardState.IsKeyDown(Keys.F1))
-            {
-                Data.Score = Score;
-                Save(Data);
-            }
-
-            priorKeyboardState = currentKeyboardState;
         }
 
         public void LoadContent(ContentManager content)
         {
             characterController.LoadContent(content);
             carController.LoadContent(content);
-            Data = Load();
-            Score = Data.Score;
-        }
-
-        private void Save(PlayerData data)
-        {
-            string serializedText = JsonSerializer.Serialize<PlayerData>(data);
-            File.WriteAllText(PATH, serializedText);
-            Debug.WriteLine(serializedText);
-        }
-
-        private PlayerData Load()
-        {
-            try
-            {
-                var data = File.ReadAllText(PATH);
-                return JsonSerializer.Deserialize<PlayerData>(data);
-            } 
-            // 'data.json' file does not exist, so we should create it, and set it to empty.
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                PlayerData data = new PlayerData();
-                // Create 'data.json' PlayerData file to save and load from if it does not already exist.
-                string serializedText = JsonSerializer.Serialize<PlayerData>(data);
-                File.WriteAllText(PATH, serializedText);
-                return data; // MAYBE RETURN A FRIENDLY MESSAGE EXPLAINING WHY LOAD DIDN'T WORK?
-            }
+            //Data = Load();
+            //Score = Data.Score;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

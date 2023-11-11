@@ -77,6 +77,7 @@ namespace AutoAvenger.Screens
         private Car exitCar;
         private SoundEffect carStart;
         private Song backgroundMusic;
+        private Item selectedItem;
 
         KeyboardState currentKeyboardState;
         GamePadState currentGamePadState;
@@ -88,10 +89,11 @@ namespace AutoAvenger.Screens
         bool canExit = false;
         bool inCar = false;
         Tilemap _tilemap;
+        string itemList;
 
         #endregion
 
-        public TitleScreen()
+        public TitleScreen(Item selectedItem)
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
@@ -99,6 +101,8 @@ namespace AutoAvenger.Screens
             _pauseAction = new InputAction(
                 new[] { Buttons.Start, Buttons.Back },
                 new[] { Keys.Back, Keys.Escape }, true);
+
+            this.selectedItem = selectedItem;
         }
 
         // Load graphics content for the game
@@ -131,6 +135,18 @@ namespace AutoAvenger.Screens
 
             //player = new CharacterController(playerPosition);
             playerInput = new PlayerInput(playerPosition);
+            // add recently selected item to player's items
+            playerInput.Player.Items.Add(selectedItem);
+
+            for (int i = 0; i < playerInput.Player.Items.Count - 1; i++)
+            {
+                itemList += $"{playerInput.Player.Items[i].type}, ";
+            }
+            itemList += $"{playerInput.Player.Items[playerInput.Player.Items.Count - 1].type}";
+            //foreach(Item item in playerInput.Player.Items)
+            //{
+            //    itemList += 
+            //}
             car1 = new Car(car1Position, true);
 
             //player.LoadContent(Content);
@@ -258,11 +274,6 @@ namespace AutoAvenger.Screens
                     Debug.WriteLine(currentMouseState.Position);
                 }
 
-                if (keyboardState.IsKeyDown(Keys.P)) 
-                {
-                    playerInput.Score++;
-                }
-
                 #region Handling collision
 
                 // Calculate collisions if the currentMode of the player is walking.
@@ -355,7 +366,8 @@ namespace AutoAvenger.Screens
             spriteBatch.DrawString(gaegu, "Instructions: Move with 'WASD',\n interact with cars using 'E'", movementInstructionsPosition, Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", exitInstructionsPosition, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.DrawString(gaegu, "Exit the game with 'ESC'", new Vector2(exitInstructionsPosition.X - 4, exitInstructionsPosition.Y - 4), Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-            spriteBatch.DrawString(gaegu, $"Score: {playerInput.Score}", Vector2.Zero, Color.Purple);
+            spriteBatch.DrawString(gaegu, $"Score: {playerInput.Player.Score}", Vector2.Zero, Color.Purple);
+            spriteBatch.DrawString(gaegu, $"Items: {itemList}", new Vector2(0, 50), Color.Purple);
 
 
             spriteBatch.End();

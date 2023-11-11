@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace AutoAvenger.Screens
         List<Model> modelList = new List<Model>();
         // The model to draw
         Model model;
+        int selectedModelIndex;
 
         public Test3DScreen() : base("")
         {
@@ -59,25 +61,26 @@ namespace AutoAvenger.Screens
 
         private void CrowbarSelected(object sender, PlayerIndexEventArgs e)
         {
-            int index = MenuEntries.IndexOf((MenuEntry)sender);
-            model = modelList[index];
+            selectedModelIndex = MenuEntries.IndexOf((MenuEntry)sender);
+            model = modelList[selectedModelIndex];
         }
 
         private void MapSelected(object sender, PlayerIndexEventArgs e)
         {
-            int index = MenuEntries.IndexOf((MenuEntry)sender);
-            model = modelList[index];
+            selectedModelIndex = MenuEntries.IndexOf((MenuEntry)sender);
+            model = modelList[selectedModelIndex];
         }
 
         private void KeySelected(object sender, PlayerIndexEventArgs e)
         {
-            int index = MenuEntries.IndexOf((MenuEntry)sender);
-            model = modelList[index];
+            selectedModelIndex = MenuEntries.IndexOf((MenuEntry)sender);
+            model = modelList[selectedModelIndex];
         }
 
         private void ContinueSelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new TitleScreen());
+            Item item = new Item() { type = (ItemType)selectedModelIndex };
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new TitleScreen(item));
         }
 
         // Load graphics content for the game

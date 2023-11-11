@@ -26,7 +26,7 @@ namespace AutoAvenger.Screens
 
         private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new TitleScreen());
+            //LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new TitleScreen());
         }
 
         private void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
