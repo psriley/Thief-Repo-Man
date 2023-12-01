@@ -14,7 +14,7 @@ namespace AutoAvenger
         public Rectangle backgroundRect;
         public int backgroundSpeed = 400;
 
-        public ScrollingBackground(Texture2D newTexture, Rectangle newRectangle) 
+        public ScrollingBackground(Texture2D newTexture, Rectangle newRectangle)
         { 
             backgroundTexture = newTexture;
             backgroundRect = newRectangle;

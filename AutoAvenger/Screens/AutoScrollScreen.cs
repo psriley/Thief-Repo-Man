@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoAvenger.StateManagement;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection.Metadata;
+using System.Diagnostics;
 
 namespace AutoAvenger.Screens
 {
@@ -22,10 +23,8 @@ namespace AutoAvenger.Screens
 
         ScrollingBackground _scrollingBackground1;
         ScrollingBackground _scrollingBackground2;
-        Texture2D _playerCarTexture;
+        SimpleAutoScrollPlayer _player;
         Vector2 _playerCarPosition;
-        Vector2 _origin;
-        float _initialRotation;
 
         MouseState currentMouseState;
 
@@ -39,7 +38,6 @@ namespace AutoAvenger.Screens
                 new[] { Keys.Back, Keys.Escape }, true);
 
             _playerCarPosition = new Vector2(1280 / 2, 720 / 1.2f);
-            _initialRotation = MathHelper.PiOver2;
         }
 
         // Load graphics content for the game
@@ -50,10 +48,9 @@ namespace AutoAvenger.Screens
 
             _scrollingBackground1 = new ScrollingBackground(_content.Load<Texture2D>("city_background"), new Rectangle(0, 0, 1280, 720));
             _scrollingBackground2 = new ScrollingBackground(_content.Load<Texture2D>("city_background"), new Rectangle(0, -720, 1280, 720));
-            _playerCarTexture = _content.Load<Texture2D>("car");
 
-
-            _origin = new Vector2(_playerCarTexture.Width / 2, _playerCarTexture.Height / 2);
+            _player = new SimpleAutoScrollPlayer(_playerCarPosition);
+            _player.LoadContent(_content);
         }
 
         public override void Deactivate()
@@ -120,6 +117,11 @@ namespace AutoAvenger.Screens
             }
             else
             {
+                if (keyboardState.IsKeyDown(Keys.E))
+                {
+                    Debug.WriteLine($"Player Position: {_player.carPosition}");
+                }
+                _player.HandleInput(gameTime, keyboardState);
             }
         }
 
@@ -134,18 +136,7 @@ namespace AutoAvenger.Screens
             spriteBatch.Begin();
             _scrollingBackground1.Draw(spriteBatch);
             _scrollingBackground2.Draw(spriteBatch);
-            // draw player here
-            spriteBatch.Draw(
-                _playerCarTexture,
-                _playerCarPosition,
-                null,
-                Color.White,
-                _initialRotation,
-                _origin,
-                1f,
-                SpriteEffects.None,
-                0f
-            );
+            _player.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
