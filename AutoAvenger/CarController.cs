@@ -20,6 +20,10 @@ namespace AutoAvenger
         const float LINEAR_ACCELERATION = 100;
         const float ANGULAR_ACCELERATION = 2;
         const float MAX_SPEED = 5;
+        const float ROTATIONAL_VELOCITY = 3f;
+        const float LINEAR_VELOCITY = 4f;
+
+        public Vector2 origin;
 
         //private float accelerationSpeed = 30.0f;
         //private float turnSpeed = 3.5f;
@@ -52,6 +56,16 @@ namespace AutoAvenger
         /// The car that this controller is controlling.
         /// </summary>
         public Car car;
+
+        public Matrix Transform
+        {
+            get
+            {
+                return Matrix.CreateTranslation(new Vector3(-origin, 0)) *
+                    Matrix.CreateRotationZ(_rotation) *
+                    Matrix.CreateTranslation(new Vector3(_position, 0));
+            }
+        }
 
         private float _speed = 200f;
         private float _playerScale = 1.5f;
@@ -104,6 +118,11 @@ namespace AutoAvenger
 
         public void HandleInput(GameTime gameTime, KeyboardState keyboardState)
         {
+            if (car.isDestroyed)
+            {
+                return;
+            }
+
             float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             //Vector2 acceleration = new Vector2(0, 0);
@@ -111,29 +130,21 @@ namespace AutoAvenger
 
             if (keyboardState.IsKeyDown(Keys.A))
             {
-                _rotation -= 0.1f;
+                _rotation -= MathHelper.ToRadians(ROTATIONAL_VELOCITY);
+
+                //_rotation -= 0.1f;
+
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration += ANGULAR_ACCELERATION;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                _rotation += 0.1f;
+                _rotation += MathHelper.ToRadians(ROTATIONAL_VELOCITY);
+
+                //_rotation += 0.1f;
+
                 //acceleration += direction * LINEAR_ACCELERATION;
                 //angularAcceleration -= ANGULAR_ACCELERATION;
-            }
-            if (keyboardState.IsKeyDown(Keys.W))
-            {
-                _velocity -= _direction * _speed;
-                //acceleration += direction * LINEAR_ACCELERATION;
-            }
-            if (keyboardState.IsKeyDown(Keys.S))
-            {
-                _velocity += _direction * _speed;
-                //acceleration -= direction * (LINEAR_ACCELERATION * 2);
-            }
-            if (keyboardState.IsKeyDown(Keys.Space))
-            {
-                _velocity = Vector2.Zero;
             }
 
             //if (velocity.Length() > 0f)
@@ -148,14 +159,44 @@ namespace AutoAvenger
 
             //angularVelocity += angularAcceleration * t;
             //angle += angularVelocity * t;
-            _direction.X = (float)Math.Cos(_rotation);
-            _direction.Y = (float)Math.Sin(_rotation);
-            // prevent diagonal movement from being faster than other movement.
-            _direction.Normalize();
+
+            _direction = new Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
+            //// prevent diagonal movement from being faster than other movement.
+            //_direction.Normalize();
+
+
+            if (keyboardState.IsKeyDown(Keys.W))
+            {
+                _position += _direction * LINEAR_VELOCITY;
+
+                //_velocity -= _direction * _speed;
+
+                //acceleration += direction * LINEAR_ACCELERATION;
+            }
+            if (keyboardState.IsKeyDown(Keys.S))
+            {
+                _position -= _direction * LINEAR_VELOCITY;
+
+                //_velocity += _direction * _speed;
+
+                //acceleration -= direction * (LINEAR_ACCELERATION * 2);
+            }
+            if (keyboardState.IsKeyDown(Keys.Space))
+            {
+                _velocity = Vector2.Zero;
+            }
 
             //velocity += acceleration * t;
             ////Position += Velocity * t;
-            _position += _velocity * t;
+            //_position += _velocity * t;
+
+            //_position = Vector2.Clamp(_position, new Vector2(0, 0), new Vector2(game))
+
+            // Update the bounds to sync with position of the car sprite
+            _bounds.X = _position.X - car.CarTexture.Width / 2;
+            _bounds.Y = _position.Y - car.CarTexture.Height / 2;
+            _bounds.Width = car.CarTexture.Width;
+            _bounds.Height = car.CarTexture.Height;
 
             // clamp the speed of the car so it never exceeds the set max speed.
             _speed = MathHelper.Clamp(_speed, 0.0f, MAX_SPEED);
@@ -188,12 +229,12 @@ namespace AutoAvenger
         }
 
         /// <summary>
-        /// Updates the ship sprite
+        /// Updates the car sprite
         /// </summary>
         /// <param name="gameTime">An object representing time in the game</param>
         public void Update(GameTime gameTime, KeyboardState keyboardState)
         {
-            
+
         }
 
         /// <summary>
@@ -203,7 +244,10 @@ namespace AutoAvenger
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, _position, null, Color.White, _rotation, new Vector2((105/2), (67/2)), 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, _position, null, Color.White, _rotation, origin, 1f, SpriteEffects.None, 0);
+            // Debug size of collider
+            var rect = new Rectangle((int)Bounds.X, (int)Bounds.Y, (int)Bounds.Width, (int)Bounds.Height);
+            spriteBatch.Draw(car.CarTexture, rect, Color.Red);
         }
     }
 }

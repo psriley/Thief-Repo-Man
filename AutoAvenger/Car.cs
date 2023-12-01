@@ -17,12 +17,23 @@ namespace AutoAvenger
         private Texture2D carTexture;
         private BoundingRectangle bounds;
         private bool drivable;
+        private int health = 3;
 
         public Vector2 CarPosition => carPosition;
 
         public BoundingRectangle Bounds => bounds;
 
         public bool Drivable => drivable;
+
+        public Texture2D CarTexture => carTexture;
+
+        public bool isDestroyed 
+        { 
+            get
+            {
+                return health <= 0;
+            }
+        }
         
         public Car(Vector2 position, bool canBeDriven)
         {

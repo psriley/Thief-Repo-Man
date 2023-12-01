@@ -314,11 +314,11 @@ namespace AutoAvenger.Screens
             Matrix transform = Matrix.Identity;
             if (inCar)
             {
-                // Player-synced scrolling
-                Vector2 offset = new Vector2(640 - playerInput.carController.Position.X, 360 - playerInput.carController.Position.Y);
+                //// Player-synced scrolling
+                //Vector2 offset = new Vector2(640 - playerInput.carController.Position.X, 360 - playerInput.carController.Position.Y);
 
-                // Create the translation matrix representing the offset
-                transform = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+                //// Create the translation matrix representing the offset
+                //transform = Matrix.CreateTranslation(offset.X, offset.Y, 0);
             }
 
             // This game has a blue background. Why? Because!
