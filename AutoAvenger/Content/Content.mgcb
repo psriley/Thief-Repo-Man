@@ -274,6 +274,18 @@
 /processorParam:TextureFormat=Compressed
 /build:rubik.spritefont
 
+#begin scrolling_background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:scrolling_background.png
+
 #begin smaller_background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -285,6 +297,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:smaller_background.png;title_screen.png
+
+#begin spike_trap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spike_trap.png
 
 #begin texture_0.png
 /importer:TextureImporter

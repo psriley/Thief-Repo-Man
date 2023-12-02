@@ -81,7 +81,7 @@ namespace AutoAvenger
                 0f
             );
 
-            DebugCollider(spriteBatch);
+            //DebugCollider(spriteBatch);
         }
 
         private void DebugCollider(SpriteBatch spriteBatch)

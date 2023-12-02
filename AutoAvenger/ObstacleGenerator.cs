@@ -13,17 +13,33 @@ namespace AutoAvenger
     {
         public List<Obstacle> obstacleList = new();
 
-        private int _minObstaclesOnScreen;
-        private int _maxObstaclesOnScreen;
+        private int _minObstaclesPerBackground;
+        private int _maxObstaclesPerBackground;
         private bool _isActive;
         private Texture2D _obstacleTexture;
+        private List<ScrollingBackground> _scrollingBackgrounds = new();
 
-        public ObstacleGenerator(Texture2D obstacleTexture, int minObstaclesOnScreen, int maxObstaclesOnScreen, bool isActive) 
+        // This variable is the number of scrolling backgrounds that have passed since the oldest obstacles still currently active and
+        // moving downwards, were placed. This allows the obstacles to be sufficiently offscreen before being repositioned.
+        private int _backgroundsPassed;
+
+        public ObstacleGenerator(Texture2D obstacleTexture, int minObstaclesPerBackground, int maxObstaclesPerBackground, bool isActive, List<ScrollingBackground> scrollingBackgrounds) 
         {
             _obstacleTexture = obstacleTexture;
-            _minObstaclesOnScreen = minObstaclesOnScreen;
-            _maxObstaclesOnScreen = maxObstaclesOnScreen;
+            _minObstaclesPerBackground = minObstaclesPerBackground;
+            _maxObstaclesPerBackground = maxObstaclesPerBackground;
             _isActive = isActive;
+            _scrollingBackgrounds = scrollingBackgrounds;
+
+            // TODO: COULD BE WORTH CHANGING THIS LATER BECAUSE THIS ASSUMES THERE ARE ONLY 2 SCROLLING BACKGROUNDS!
+            if (scrollingBackgrounds.Count != 2)
+            {
+                throw new ArgumentException("This constructor assumes there are only 2 scrolling backgrounds. It will need refactoring to accommodate a different number.");
+            }
+
+            _backgroundsPassed = 0;
+
+            //Generate(_scrollingBackgrounds.Last());
         }
 
         public void Generate(ScrollingBackground backgroundToAddTo)
@@ -31,27 +47,29 @@ namespace AutoAvenger
             if (_isActive)
             {
                 // Check if we need to move any previously created obstacles to new background from off screen background
-                if (obstacleList.Count > 0)
+                if (obstacleList.Count > 0 && _backgroundsPassed >= 2)
                 {
                     MoveOffScreenObstacles(backgroundToAddTo);
+                    _backgroundsPassed = 0;
                 }
-                if (obstacleList.Count < _maxObstaclesOnScreen)
+                if (_backgroundsPassed < 2)
                 {
                     CreateObstacles(backgroundToAddTo);
                 }
+
+                // Because 'Generate' is called every time the scrolling background is moved, this also means it is a good candidate to
+                // increment this variable.
+                _backgroundsPassed++;
             }
         }
 
         private void CreateObstacles(ScrollingBackground background)
         {
-            if (obstacleList.Count < _maxObstaclesOnScreen)
+            for (int i = obstacleList.Count; i <= _maxObstaclesPerBackground; i++)
             {
-                for (int i = obstacleList.Count; i <= _maxObstaclesOnScreen; i++)
-                {
-                    Obstacle obstacle = new Obstacle(background, _obstacleTexture);
-                    obstacleList.Add(obstacle);
-                    Debug.WriteLine($"Obstacle: {obstacle}, Position: {obstacle.position}");
-                }
+                Obstacle obstacle = new Obstacle(background, _obstacleTexture);
+                obstacleList.Add(obstacle);
+                Debug.WriteLine($"Obstacle: {obstacle}, Position: {obstacle.position}");
             }
         }
 
@@ -61,7 +79,7 @@ namespace AutoAvenger
 
             foreach (Obstacle o in obstacleList)
             {
-                o.position = new Vector2(rand.Next(0, background.backgroundRect.Width), rand.Next(0, background.backgroundRect.Height));
+                o.position = new Vector2(rand.Next(background.backgroundRect.Left, background.backgroundRect.Right), rand.Next(background.backgroundRect.Top, background.backgroundRect.Bottom));
             }
         }
     }

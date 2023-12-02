@@ -19,7 +19,7 @@ namespace AutoAvenger
             {
                 // generate a random position
                 Random rand = new();
-                position = new Vector2(rand.Next(0, background.backgroundRect.Width), rand.Next(0, background.backgroundRect.Height));
+                this.position = new Vector2(rand.Next(0, background.backgroundRect.Width), rand.Next(0, background.backgroundRect.Height));
             }
             else
             {
@@ -37,7 +37,7 @@ namespace AutoAvenger
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(obstacleTexture, position, Color.Blue);
+            spriteBatch.Draw(obstacleTexture, position, Color.White);
         }
     }
 }

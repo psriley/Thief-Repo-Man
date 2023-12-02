@@ -46,14 +46,14 @@ namespace AutoAvenger.Screens
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _scrollingBackground1 = new ScrollingBackground(_content.Load<Texture2D>("city_background"), new Rectangle(0, 0, 1280, 720));
-            _scrollingBackground2 = new ScrollingBackground(_content.Load<Texture2D>("city_background"), new Rectangle(0, -720, 1280, 720));
+            _scrollingBackground1 = new ScrollingBackground(_content.Load<Texture2D>("scrolling_background"), new Rectangle(0, 0, 1280, 720));
+            _scrollingBackground2 = new ScrollingBackground(_content.Load<Texture2D>("scrolling_background"), new Rectangle(0, -720, 1280, 720));
 
             _player = new SimpleAutoScrollPlayer(_playerCarPosition);
             _player.LoadContent(_content);
 
             // Obstacles
-            _obsGenerator = new(_content.Load<Texture2D>("player(drawn)"), 2, 5, true);
+            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
         }
 
         public override void Deactivate()
@@ -80,6 +80,14 @@ namespace AutoAvenger.Screens
 
             if (IsActive)
             {
+                if (_obsGenerator.obstacleList.Count > 0)
+                {
+                    foreach (Obstacle o in _obsGenerator.obstacleList)
+                    {
+                        o.Update(gameTime, _scrollingBackground1.backgroundSpeed);
+                    }
+                }
+
                 if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0)
                 {
                     _scrollingBackground1.backgroundRect.Y = _scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height;
@@ -90,9 +98,15 @@ namespace AutoAvenger.Screens
                     _scrollingBackground2.backgroundRect.Y = _scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height;
                     _obsGenerator.Generate(_scrollingBackground2);
                 }
+
                 _scrollingBackground1.Update(gameTime);
                 _scrollingBackground2.Update(gameTime);
             }
+        }
+
+        private void GenerateObstacles()
+        {
+
         }
 
         // Unlike the Update method, this will only be called when the gameplay screen is active.
