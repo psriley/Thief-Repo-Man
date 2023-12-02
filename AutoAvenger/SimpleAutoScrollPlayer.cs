@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assimp;
+using AutoAvenger.Collisions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +19,7 @@ namespace AutoAvenger
         private Vector2 _origin;
         private float _initialRotation;
         private float _speed;
+        private BoundingRectangle _bounds;
 
         private Vector2 _direction;
         public Vector2 Direction => _direction;
@@ -35,6 +36,8 @@ namespace AutoAvenger
         public void LoadContent(ContentManager content)
         {
             carTexture = content.Load<Texture2D>("car");
+
+            _bounds = new BoundingRectangle(carPosition, carTexture.Width, carTexture.Height);
             _origin = new Vector2(carTexture.Width / 2, carTexture.Height / 2);
         }
 
@@ -52,7 +55,15 @@ namespace AutoAvenger
             {
                 _direction.Normalize();
                 carPosition += _direction * _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                UpdateBounds();
             }
+        }
+
+        private void UpdateBounds()
+        {
+            _bounds.X = carPosition.X;
+            _bounds.Y = carPosition.Y;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -66,6 +77,24 @@ namespace AutoAvenger
                 _initialRotation,
                 _origin,
                 1f,
+                SpriteEffects.None,
+                0f
+            );
+
+            DebugCollider(spriteBatch);
+        }
+
+        private void DebugCollider(SpriteBatch spriteBatch)
+        {
+            // Debug size of collider
+            var rect = new Rectangle((int)_bounds.X, (int)_bounds.Y, (int)_bounds.Width, (int)_bounds.Height);
+            spriteBatch.Draw(
+                carTexture, // You can replace this with an appropriate debug texture if needed
+                rect,
+                null,
+                Color.Red,
+                _initialRotation,
+                _origin,
                 SpriteEffects.None,
                 0f
             );

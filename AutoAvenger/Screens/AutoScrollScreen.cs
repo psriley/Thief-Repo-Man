@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoAvenger.StateManagement;
 using Microsoft.Xna.Framework.Input;
-using System.Reflection.Metadata;
 using System.Diagnostics;
 
 namespace AutoAvenger.Screens
@@ -25,6 +24,7 @@ namespace AutoAvenger.Screens
         ScrollingBackground _scrollingBackground2;
         SimpleAutoScrollPlayer _player;
         Vector2 _playerCarPosition;
+        ObstacleGenerator _obsGenerator;
 
         MouseState currentMouseState;
 
@@ -51,6 +51,9 @@ namespace AutoAvenger.Screens
 
             _player = new SimpleAutoScrollPlayer(_playerCarPosition);
             _player.LoadContent(_content);
+
+            // Obstacles
+            _obsGenerator = new(_content.Load<Texture2D>("player(drawn)"), 2, 5, true);
         }
 
         public override void Deactivate()
@@ -80,10 +83,12 @@ namespace AutoAvenger.Screens
                 if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0)
                 {
                     _scrollingBackground1.backgroundRect.Y = _scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height;
+                    _obsGenerator.Generate(_scrollingBackground1);
                 }
                 if (_scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height >= 0)
                 {
                     _scrollingBackground2.backgroundRect.Y = _scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height;
+                    _obsGenerator.Generate(_scrollingBackground2);
                 }
                 _scrollingBackground1.Update(gameTime);
                 _scrollingBackground2.Update(gameTime);
@@ -137,6 +142,13 @@ namespace AutoAvenger.Screens
             _scrollingBackground1.Draw(spriteBatch);
             _scrollingBackground2.Draw(spriteBatch);
             _player.Draw(spriteBatch);
+            if (_obsGenerator.obstacleList != null)
+            {
+                foreach (Obstacle o in _obsGenerator.obstacleList)
+                {
+                    o.Draw(spriteBatch);
+                }
+            }
             spriteBatch.End();
         }
     }
