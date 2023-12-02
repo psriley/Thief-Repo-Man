@@ -11,20 +11,20 @@ namespace AutoAvenger.Screens
             var playGameMenuEntry = new MenuEntry("Play Game");
             var optionsMenuEntry = new MenuEntry("Options");
             var exitMenuEntry = new MenuEntry("Exit");
-            var play3DSceneMenuEntry = new MenuEntry("3D Scene");
-            var playAutoScrollerMenuEntry = new MenuEntry("Auto Scroller");
+            //var play3DSceneMenuEntry = new MenuEntry("3D Scene");
+            //var playAutoScrollerMenuEntry = new MenuEntry("Auto Scroller");
 
-            playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
+            playGameMenuEntry.Selected += PlayAutoScrollerMenuEntry;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
-            play3DSceneMenuEntry.Selected += Play3DSceneMenuEntrySelected;
-            playAutoScrollerMenuEntry.Selected += PlayAutoScrollerMenuEntry;
+            //play3DSceneMenuEntry.Selected += Play3DSceneMenuEntrySelected;
+            //playAutoScrollerMenuEntry.Selected += PlayAutoScrollerMenuEntry;
 
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
-            MenuEntries.Add(play3DSceneMenuEntry);
-            MenuEntries.Add(playAutoScrollerMenuEntry);
+            //MenuEntries.Add(play3DSceneMenuEntry);
+            //MenuEntries.Add(playAutoScrollerMenuEntry);
         }
 
         private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)

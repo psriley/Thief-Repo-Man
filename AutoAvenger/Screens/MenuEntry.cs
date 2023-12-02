@@ -37,7 +37,7 @@ namespace AutoAvenger.Screens
         public MenuEntry(string text, Color? color = null)
         {
             _text = text;
-            _color = color ?? Color.White;
+            _color = color ?? Color.Black;
             //if (color == null)
             //{
             //    _color = Color.White;
@@ -65,7 +65,7 @@ namespace AutoAvenger.Screens
         // This can be overridden to customize the appearance.
         public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            var color = isSelected ? Color.Black : _color;
+            var color = isSelected ? Color.Red : _color;
 
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;
