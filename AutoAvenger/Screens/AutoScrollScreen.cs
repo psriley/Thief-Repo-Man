@@ -28,6 +28,8 @@ namespace AutoAvenger.Screens
         SpriteFont _gaeguFont;
 
         MouseState currentMouseState;
+        KeyboardState currentKeyboardState;
+        KeyboardState priorKeyboardState;
 
         public AutoScrollScreen()
         {
@@ -57,7 +59,7 @@ namespace AutoAvenger.Screens
             _player.health = 50;
 
             // Obstacles
-            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), _content.Load<Texture2D>("car"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
+            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), _content.Load<Texture2D>("car"), _content.Load<Texture2D>("damaged_spikes"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
         }
 
         public override void Deactivate()
@@ -89,7 +91,7 @@ namespace AutoAvenger.Screens
                     foreach (Obstacle o in _obsGenerator.obstacleList)
                     {
                         o.Update(gameTime, _scrollingBackground1.backgroundSpeed);
-                        if (!o.isDestroyed && o.bounds.CollidesWith(_player.Bounds))
+                        if (!o.isDestroyed && !_player.Jumping && o.bounds.CollidesWith(_player.Bounds))
                         {
                             o.DamageCar(_player);
                         }
@@ -126,10 +128,12 @@ namespace AutoAvenger.Screens
             // Look up inputs for the active player profile.
             int playerIndex = (int)ControllingPlayer.Value;
 
-            var keyboardState = input.CurrentKeyboardStates[playerIndex];
+            //var keyboardState = input.CurrentKeyboardStates[playerIndex];
             var gamePadState = input.CurrentGamePadStates[playerIndex];
 
             currentMouseState = Mouse.GetState();
+            priorKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
 
             // The game pauses either if the user presses the pause button, or if
             // they unplug the active gamepad. This requires us to keep track of
@@ -144,11 +148,11 @@ namespace AutoAvenger.Screens
             }
             else
             {
-                if (keyboardState.IsKeyDown(Keys.E))
+                if (currentKeyboardState.IsKeyDown(Keys.E))
                 {
                     Debug.WriteLine($"Player Position: {_player.carPosition}");
                 }
-                _player.HandleInput(gameTime, keyboardState);
+                _player.HandleInput(gameTime, currentKeyboardState, priorKeyboardState);
             }
         }
 
@@ -163,7 +167,6 @@ namespace AutoAvenger.Screens
             spriteBatch.Begin();
             _scrollingBackground1.Draw(spriteBatch);
             _scrollingBackground2.Draw(spriteBatch);
-            _player.Draw(spriteBatch);
             if (_obsGenerator.obstacleList != null)
             {
                 foreach (Obstacle o in _obsGenerator.obstacleList)
@@ -171,6 +174,7 @@ namespace AutoAvenger.Screens
                     o.Draw(spriteBatch);
                 }
             }
+            _player.Draw(spriteBatch);
             spriteBatch.DrawString(_gaeguFont, $"Car Health: {_player.health}", new Vector2(25, 25), Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
         }

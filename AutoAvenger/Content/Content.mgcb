@@ -175,6 +175,18 @@
 /processorParam:Scale=5
 /build:city.tmap
 
+#begin damaged_spikes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:damaged_spikes.png
+
 #begin forward_car.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -333,6 +345,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spike_trap.png
+
+#begin spikes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spikes.png
 
 #begin texture_0.png
 /importer:TextureImporter

@@ -16,10 +16,11 @@ namespace AutoAvenger
         public Vector2 position;
         public Texture2D obstacleTexture;
         public Texture2D debugTexture;
+        public Texture2D damagedTexture;
         public BoundingRectangle bounds;
         public bool isDestroyed;
 
-        public Obstacle(ScrollingBackground background, Texture2D obstacleTexture, Texture2D debugTexture, Vector2? position = null)
+        public Obstacle(ScrollingBackground background, Texture2D obstacleTexture, Texture2D debugTexture, Texture2D damagedTexture, Vector2? position = null)
         {
             if (position == null)
             {
@@ -36,6 +37,7 @@ namespace AutoAvenger
             this.bounds = new BoundingRectangle(new Vector2((this.position.X / 2), (this.position.Y / 2)), obstacleTexture.Width, obstacleTexture.Height);
 
             this.obstacleTexture = obstacleTexture;
+            this.damagedTexture = damagedTexture;
             this.debugTexture = debugTexture;
         }
 
@@ -65,7 +67,14 @@ namespace AutoAvenger
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(obstacleTexture, position, Color.White);
+            if (isDestroyed)
+            {
+                spriteBatch.Draw(damagedTexture, position, Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(obstacleTexture, position, Color.White);
+            }
 
             // Debug size of collider
             //var boundingRect = new BoundingRectangle(new Vector2((bounds.X / 2), (bounds.Y / 2)), obstacleTexture.Width, obstacleTexture.Height);

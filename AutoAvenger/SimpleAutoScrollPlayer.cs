@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.XAudio2;
 
 namespace AutoAvenger
 {
@@ -25,6 +27,13 @@ namespace AutoAvenger
 
         private Vector2 _direction;
         public Vector2 Direction => _direction;
+        public bool Jumping;
+
+        float jumpTimer;
+        float jumpDuration = 3.0f;
+        float maxCarSize = 1.5f; // max size as the car jumps
+
+        float carScale = 1.0f; // initial scale of the car
 
         public SimpleAutoScrollPlayer(Vector2 carPosition)
         {
@@ -33,6 +42,8 @@ namespace AutoAvenger
             _direction = Vector2.Zero;
             //_initialRotation = MathHelper.PiOver2;
             _speed = 250f;
+            Jumping = false;
+            jumpTimer = 0f;
         }
 
         public void LoadContent(ContentManager content)
@@ -42,7 +53,7 @@ namespace AutoAvenger
             _bounds = new BoundingRectangle(carPosition, carTexture.Width, carTexture.Height);
         }
 
-        public void HandleInput(GameTime gameTime, KeyboardState currentKeyboardState)
+        public void HandleInput(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState priorKeyboardState)
         {
             _direction = Vector2.Zero;
 
@@ -50,6 +61,33 @@ namespace AutoAvenger
             else if (currentKeyboardState.IsKeyDown(Keys.S)) { _direction.Y++; }
             if (currentKeyboardState.IsKeyDown(Keys.A)) { _direction.X--; }
             else if (currentKeyboardState.IsKeyDown(Keys.D)) { _direction.X++; }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Space) && priorKeyboardState.IsKeyUp(Keys.Space) && !Jumping)
+            {
+                Jump();
+            }
+            else if (Jumping)
+            {
+                jumpTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (jumpTimer < (jumpDuration / 2))
+                {
+                    // increase the size of the car as it ascends
+                    float progress = jumpTimer / (jumpDuration / 2);
+                    carScale = MathHelper.Lerp(1.0f, maxCarSize, progress);
+                }
+                else
+                {
+                    // Decrease the size of the car back to its initial size as it descends
+                    float progress = (jumpTimer - 1.5f) / (jumpDuration - 1.5f);
+                    carScale = MathHelper.Lerp(maxCarSize, 1.0f, progress);
+                }
+
+                if (jumpTimer >= jumpDuration)
+                {
+                    Jumping = false;
+                }
+            }
 
             // Check if the direction vector is not a zero vector before normalizing
             if (_direction != Vector2.Zero)
@@ -59,6 +97,18 @@ namespace AutoAvenger
 
                 UpdateBounds();
             }
+        }
+
+        private void Jump()
+        {
+            Debug.WriteLine("Jumping!");
+            // Turn off handle input (can't move in the air)?
+            // Turn off collision (can jump over obstacles)
+            // Make car bigger and darker as you jump, and then smaller and lighter as you land
+            Jumping = true;
+            jumpTimer = 0f;
+            // Reset car scale at the beginning of the jump
+            carScale = 1f;
         }
 
         private void UpdateBounds()
@@ -77,12 +127,12 @@ namespace AutoAvenger
                 Color.White,
                 0f,
                 Vector2.Zero,
-                1f,
+                carScale,
                 SpriteEffects.None,
                 0f
             );
 
-            DebugCollider(spriteBatch);
+            //DebugCollider(spriteBatch);
         }
 
         private void DebugCollider(SpriteBatch spriteBatch)
