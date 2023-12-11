@@ -17,15 +17,17 @@ namespace AutoAvenger
         private int _maxObstaclesPerBackground;
         private bool _isActive;
         private Texture2D _obstacleTexture;
+        private Texture2D _debugTexture;
         private List<ScrollingBackground> _scrollingBackgrounds = new();
 
         // This variable is the number of scrolling backgrounds that have passed since the oldest obstacles still currently active and
         // moving downwards, were placed. This allows the obstacles to be sufficiently offscreen before being repositioned.
         private int _backgroundsPassed;
 
-        public ObstacleGenerator(Texture2D obstacleTexture, int minObstaclesPerBackground, int maxObstaclesPerBackground, bool isActive, List<ScrollingBackground> scrollingBackgrounds) 
+        public ObstacleGenerator(Texture2D obstacleTexture, Texture2D debugTexture, int minObstaclesPerBackground, int maxObstaclesPerBackground, bool isActive, List<ScrollingBackground> scrollingBackgrounds) 
         {
             _obstacleTexture = obstacleTexture;
+            _debugTexture = debugTexture;
             _minObstaclesPerBackground = minObstaclesPerBackground;
             _maxObstaclesPerBackground = maxObstaclesPerBackground;
             _isActive = isActive;
@@ -67,7 +69,7 @@ namespace AutoAvenger
         {
             for (int i = obstacleList.Count; i <= _maxObstaclesPerBackground; i++)
             {
-                Obstacle obstacle = new Obstacle(background, _obstacleTexture);
+                Obstacle obstacle = new Obstacle(background, _obstacleTexture, _debugTexture);
                 obstacleList.Add(obstacle);
                 Debug.WriteLine($"Obstacle: {obstacle}, Position: {obstacle.position}");
             }
@@ -80,6 +82,9 @@ namespace AutoAvenger
             foreach (Obstacle o in obstacleList)
             {
                 o.position = new Vector2(rand.Next(background.backgroundRect.Left, background.backgroundRect.Right), rand.Next(background.backgroundRect.Top, background.backgroundRect.Bottom));
+                o.bounds.X = o.position.X;
+                o.bounds.Y = o.position.Y;
+                o.isDestroyed = false;
             }
         }
     }

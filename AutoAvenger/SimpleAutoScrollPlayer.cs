@@ -15,11 +15,13 @@ namespace AutoAvenger
     {
         public Texture2D carTexture;
         public Vector2 carPosition;
+        public int health;
 
         private Vector2 _origin;
-        private float _initialRotation;
+        //private float _initialRotation;
         private float _speed;
         private BoundingRectangle _bounds;
+        public BoundingRectangle Bounds => _bounds;
 
         private Vector2 _direction;
         public Vector2 Direction => _direction;
@@ -29,16 +31,15 @@ namespace AutoAvenger
             this.carPosition = carPosition;
 
             _direction = Vector2.Zero;
-            _initialRotation = MathHelper.PiOver2;
+            //_initialRotation = MathHelper.PiOver2;
             _speed = 250f;
         }
 
         public void LoadContent(ContentManager content)
         {
-            carTexture = content.Load<Texture2D>("car");
+            carTexture = content.Load<Texture2D>("forward_car");
 
             _bounds = new BoundingRectangle(carPosition, carTexture.Width, carTexture.Height);
-            _origin = new Vector2(carTexture.Width / 2, carTexture.Height / 2);
         }
 
         public void HandleInput(GameTime gameTime, KeyboardState currentKeyboardState)
@@ -74,14 +75,14 @@ namespace AutoAvenger
                 carPosition,
                 null,
                 Color.White,
-                _initialRotation,
-                _origin,
+                0f,
+                Vector2.Zero,
                 1f,
                 SpriteEffects.None,
                 0f
             );
 
-            //DebugCollider(spriteBatch);
+            DebugCollider(spriteBatch);
         }
 
         private void DebugCollider(SpriteBatch spriteBatch)
@@ -93,8 +94,8 @@ namespace AutoAvenger
                 rect,
                 null,
                 Color.Red,
-                _initialRotation,
-                _origin,
+                0f,
+                Vector2.Zero,
                 SpriteEffects.None,
                 0f
             );

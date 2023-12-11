@@ -25,6 +25,7 @@ namespace AutoAvenger.Screens
         SimpleAutoScrollPlayer _player;
         Vector2 _playerCarPosition;
         ObstacleGenerator _obsGenerator;
+        SpriteFont _gaeguFont;
 
         MouseState currentMouseState;
 
@@ -46,14 +47,17 @@ namespace AutoAvenger.Screens
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
+            _gaeguFont = _content.Load<SpriteFont>("gaegu");
+
             _scrollingBackground1 = new ScrollingBackground(_content.Load<Texture2D>("scrolling_background"), new Rectangle(0, 0, 1280, 720));
             _scrollingBackground2 = new ScrollingBackground(_content.Load<Texture2D>("scrolling_background"), new Rectangle(0, -720, 1280, 720));
 
             _player = new SimpleAutoScrollPlayer(_playerCarPosition);
             _player.LoadContent(_content);
+            _player.health = 50;
 
             // Obstacles
-            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
+            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), _content.Load<Texture2D>("car"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
         }
 
         public override void Deactivate()
@@ -85,6 +89,10 @@ namespace AutoAvenger.Screens
                     foreach (Obstacle o in _obsGenerator.obstacleList)
                     {
                         o.Update(gameTime, _scrollingBackground1.backgroundSpeed);
+                        if (!o.isDestroyed && o.bounds.CollidesWith(_player.Bounds))
+                        {
+                            o.DamageCar(_player);
+                        }
                     }
                 }
 
@@ -163,6 +171,7 @@ namespace AutoAvenger.Screens
                     o.Draw(spriteBatch);
                 }
             }
+            spriteBatch.DrawString(_gaeguFont, $"Car Health: {_player.health}", new Vector2(25, 25), Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
         }
     }
