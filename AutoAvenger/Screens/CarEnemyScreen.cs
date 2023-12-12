@@ -67,6 +67,24 @@ namespace AutoAvenger.Screens
             {
                 _enemyCar.Update(gameTime);
                 _enemyCar._followerPosition.X = _player.carPosition.X;
+
+                foreach (Bullet b in _enemyCar.bullets)
+                {
+                    if (b.Bounds.CollidesWith(_player.Bounds))
+                    {
+                        b.DamageCar(_player);
+                        b.isDestroyed = true;
+                    }
+                }
+
+                foreach (Bullet b in _player.bullets)
+                {
+                    if (b.Bounds.CollidesWith(_enemyCar.Bounds))
+                    {
+                        b.DamageCar(_player, _enemyCar);
+                        b.isDestroyed = true;
+                    }
+                }
             }
         }
 

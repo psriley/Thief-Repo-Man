@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace AutoAvenger
 {
@@ -11,13 +12,16 @@ namespace AutoAvenger
         public BoundingRectangle Bounds => _bounds;
 
         private Texture2D _enemyTexture;
-        private float _enemyHealth;
+        public float _enemyHealth;
+        public float maxEnemyHealth;
         private Vector2 _playerPosition;
         public Vector2 _followerPosition;
         private SimpleAutoScrollPlayer _playerCar;
         public float followSpeed = 200f;
         public List<Bullet> bullets = new List<Bullet>();
         public float shotTimer;
+
+        public bool isDestroyed;
 
         public EnemyCar(Texture2D texture, SimpleAutoScrollPlayer playerToFollow)
         {
@@ -27,6 +31,9 @@ namespace AutoAvenger
             _followerPosition = new Vector2(_playerCar.carPosition.X, 720 / 10f);
 
             shotTimer = 0;
+            _enemyHealth = maxEnemyHealth;
+            isDestroyed = false;
+            _bounds = new BoundingRectangle(_followerPosition, _enemyTexture.Width, _enemyTexture.Height);
         }
 
         private void UpdatePlayerPosition()
@@ -60,6 +67,9 @@ namespace AutoAvenger
                 }
             }
 
+            _bounds.X = _followerPosition.X;
+            _bounds.Y = _followerPosition.Y;
+
             //UpdatePlayerPosition(); // Update the player position
 
             // Update follower position with a delay
@@ -69,13 +79,9 @@ namespace AutoAvenger
             // Rest of your update logic...
         }
 
-        public void DamageCar(float damage)
-        {
-            _enemyHealth -= damage;
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (isDestroyed) return;
             spriteBatch.Begin();
             // Draw bullets
             foreach (var bullet in bullets)

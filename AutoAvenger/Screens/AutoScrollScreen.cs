@@ -105,10 +105,10 @@ namespace AutoAvenger.Screens
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (timer >= lengthOfLevel)
-                {
-                    endLevel = true;
-                }
+                //if (timer >= lengthOfLevel)
+                //{
+                //    endLevel = true;
+                //}
 
                 if (_obsGenerator.obstacleList.Count > 0)
                 {
@@ -122,16 +122,16 @@ namespace AutoAvenger.Screens
                     }
                 }
 
-                if (_player.bullets.Count > 0 && _currentEnemyCar != null)
-                {
-                    foreach (Bullet b in _player.bullets)
-                    {
-                        if (b.Bounds.CollidesWith(_currentEnemyCar.Bounds))
-                        {
-                            _currentEnemyCar.DamageCar(_player.bulletDamage);
-                        }
-                    }
-                }
+                //if (_player.bullets.Count > 0 && _currentEnemyCar != null)
+                //{
+                //    foreach (Bullet b in _player.bullets)
+                //    {
+                //        if (b.Bounds.CollidesWith(_currentEnemyCar.Bounds))
+                //        {
+                //            _currentEnemyCar.DamageCar(_player.bulletDamage);
+                //        }
+                //    }
+                //}
 
                 if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0 && !endLevel)
                 {
@@ -225,7 +225,7 @@ namespace AutoAvenger.Screens
             }
 
             _player.Draw(spriteBatch);
-            spriteBatch.DrawString(_gaeguFont, $"Car Health: {_player.health}", new Vector2(25, 25), Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(_gaeguFont, $"Car Health: {_player.health}", new Vector2(25, 25), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
         }
     }

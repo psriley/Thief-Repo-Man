@@ -21,6 +21,7 @@ namespace AutoAvenger
 
         private Texture2D texture;
         private float lifespan = 2f;
+        public bool isDestroyed;
 
         public Bullet(Texture2D texture, Vector2 position)
         {
@@ -31,6 +32,8 @@ namespace AutoAvenger
 
         public void Update(GameTime gameTime, bool up)
         {
+            if (isDestroyed) return;
+
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (timer >= lifespan)
@@ -47,6 +50,9 @@ namespace AutoAvenger
             {
                 position += Vector2.UnitY * linearVelocity;
             }
+
+            _bounds.X = position.X; 
+            _bounds.Y = position.Y;
         }
 
         public object Clone()
@@ -54,8 +60,25 @@ namespace AutoAvenger
             return this.MemberwiseClone();
         }
 
+        public void DamageCar(SimpleAutoScrollPlayer player = null, EnemyCar enemy = null)
+        {
+            if (enemy == null)
+            {
+                player.health -= 1f;
+            }
+            else
+            {
+                enemy._enemyHealth -= 10f;
+                if (enemy._enemyHealth <= 0) 
+                {
+                    enemy.isDestroyed = true;
+                }
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (isDestroyed) return;
             spriteBatch.Draw(texture, position, Color.White);
         }
     }
