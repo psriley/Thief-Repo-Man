@@ -16,6 +16,7 @@ namespace AutoAvenger
     public class SimpleAutoScrollPlayer
     {
         public Texture2D carTexture;
+        public Texture2D bulletTexture;
         public Vector2 carPosition;
         public float health;
         // damage done by a bullet
@@ -55,8 +56,9 @@ namespace AutoAvenger
         public void LoadContent(ContentManager content)
         {
             carTexture = content.Load<Texture2D>("forward_car");
+            bulletTexture = content.Load<Texture2D>("bullet");
 
-            Bullet = new Bullet(carTexture, carPosition);
+            Bullet = new Bullet(bulletTexture, carPosition);
 
             _bounds = new BoundingRectangle(carPosition, carTexture.Width, carTexture.Height);
         }
@@ -158,7 +160,7 @@ namespace AutoAvenger
 
         private void Shoot()
         {
-            var bullet = new Bullet(carTexture, carPosition); // Create a new Bullet instance
+            var bullet = new Bullet(bulletTexture, carPosition); // Create a new Bullet instance
             bullet.timer = 0;
             bullet.linearVelocity = new Vector2(0, 5f);
 

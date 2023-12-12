@@ -127,6 +127,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Box.dae
 
+#begin bullet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bullet.png
+
 #begin car_start.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

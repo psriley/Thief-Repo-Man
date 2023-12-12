@@ -24,6 +24,7 @@ namespace AutoAvenger.Screens
         
         EnemyCar _enemyCar;
         Texture2D _enemyCarTexture;
+        Texture2D _bulletTexture;
 
         public CarEnemyScreen() : base()
         {
@@ -39,6 +40,7 @@ namespace AutoAvenger.Screens
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             _enemyCarTexture = _content.Load<Texture2D>("forward_car");
+            _bulletTexture = _content.Load<Texture2D>("bullet");
         }
 
         public override void Deactivate()
@@ -59,7 +61,7 @@ namespace AutoAvenger.Screens
 
             if (timerBeforeEnemy >= 10 && _enemyCar == null)
             {
-                _enemyCar = new EnemyCar(_enemyCarTexture, _player);
+                _enemyCar = new EnemyCar(_enemyCarTexture, _bulletTexture, _player);
                 Debug.WriteLine("Spawning enemy...");
             }
 
@@ -73,6 +75,10 @@ namespace AutoAvenger.Screens
                     if (b.Bounds.CollidesWith(_player.Bounds))
                     {
                         b.DamageCar(_player);
+                        if (_player.health <= 0)
+                        {
+                            LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new CarEnemyScreen());
+                        }
                         b.isDestroyed = true;
                     }
                 }
@@ -81,7 +87,10 @@ namespace AutoAvenger.Screens
                 {
                     if (b.Bounds.CollidesWith(_enemyCar.Bounds))
                     {
-                        b.DamageCar(_player, _enemyCar);
+                        if (b.DamageCar(_player, _enemyCar))
+                        {
+                            LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new MainMenuScreen());
+                        }
                         b.isDestroyed = true;
                     }
                 }

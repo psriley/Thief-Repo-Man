@@ -60,7 +60,7 @@ namespace AutoAvenger
             return this.MemberwiseClone();
         }
 
-        public void DamageCar(SimpleAutoScrollPlayer player = null, EnemyCar enemy = null)
+        public bool DamageCar(SimpleAutoScrollPlayer player = null, EnemyCar enemy = null)
         {
             if (enemy == null)
             {
@@ -72,8 +72,11 @@ namespace AutoAvenger
                 if (enemy._enemyHealth <= 0) 
                 {
                     enemy.isDestroyed = true;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public void Draw(SpriteBatch spriteBatch)

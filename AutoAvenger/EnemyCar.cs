@@ -12,6 +12,7 @@ namespace AutoAvenger
         public BoundingRectangle Bounds => _bounds;
 
         private Texture2D _enemyTexture;
+        private Texture2D _bulletTexture;
         public float _enemyHealth;
         public float maxEnemyHealth;
         private Vector2 _playerPosition;
@@ -23,9 +24,10 @@ namespace AutoAvenger
 
         public bool isDestroyed;
 
-        public EnemyCar(Texture2D texture, SimpleAutoScrollPlayer playerToFollow)
+        public EnemyCar(Texture2D carTexture, Texture2D bulletTexture, SimpleAutoScrollPlayer playerToFollow)
         {
-            _enemyTexture = texture;
+            _enemyTexture = carTexture;
+            _bulletTexture = bulletTexture;
             _playerCar = playerToFollow;
             UpdatePlayerPosition(); // Initialize the player position
             _followerPosition = new Vector2(_playerCar.carPosition.X, 720 / 10f);
@@ -48,7 +50,7 @@ namespace AutoAvenger
             if (shotTimer >= 3)
             {
                 shotTimer = 0;
-                var bullet = new Bullet(_enemyTexture, _followerPosition); // Create a new Bullet instance
+                var bullet = new Bullet(_bulletTexture, _followerPosition); // Create a new Bullet instance
                 bullet.timer = 0;
                 bullet.linearVelocity = new Vector2(0, 12f);
 
