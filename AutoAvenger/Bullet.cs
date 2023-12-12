@@ -68,7 +68,7 @@ namespace AutoAvenger
             }
             else
             {
-                enemy._enemyHealth -= 10f;
+                enemy._enemyHealth -= 1f;
                 if (enemy._enemyHealth <= 0) 
                 {
                     enemy.isDestroyed = true;
