@@ -17,7 +17,11 @@ namespace AutoAvenger
     {
         public Texture2D carTexture;
         public Vector2 carPosition;
-        public int health;
+        public float health;
+        // damage done by a bullet
+        public float bulletDamage;
+        public Bullet Bullet;
+        public List<Bullet> bullets = new List<Bullet>();
 
         private Vector2 _origin;
         //private float _initialRotation;
@@ -44,17 +48,43 @@ namespace AutoAvenger
             _speed = 250f;
             Jumping = false;
             jumpTimer = 0f;
+
+            bulletDamage = 1f;
         }
 
         public void LoadContent(ContentManager content)
         {
             carTexture = content.Load<Texture2D>("forward_car");
 
+            Bullet = new Bullet(carTexture, carPosition);
+
             _bounds = new BoundingRectangle(carPosition, carTexture.Width, carTexture.Height);
         }
 
-        public void HandleInput(GameTime gameTime, KeyboardState currentKeyboardState, KeyboardState priorKeyboardState)
+        public void Update(GameTime gameTime)
         {
+            foreach (var bullet in bullets)
+            {
+                bullet.Update(gameTime);
+
+                // Remove bullets that are outside the screen or expired
+                if (bullet.lifespanEnded)
+                {
+                    bullets.Remove(bullet);
+                    break; // Exit the loop to avoid modifying the collection during iteration
+                }
+            }
+
+            Debug.WriteLine($"Bullet count: {bullets.Count}");
+        }
+
+        public void HandleInput(
+            GameTime gameTime, 
+            KeyboardState currentKeyboardState, 
+            KeyboardState priorKeyboardState, 
+            MouseState currentMouseState,
+            MouseState priorMouseState
+        ){
             _direction = Vector2.Zero;
 
             if (currentKeyboardState.IsKeyDown(Keys.W)) { _direction.Y--; }
@@ -89,6 +119,13 @@ namespace AutoAvenger
                 }
             }
 
+            if (currentMouseState.LeftButton == ButtonState.Pressed &&
+                priorMouseState.LeftButton == ButtonState.Released)
+            {
+                Debug.WriteLine("Shooting!");
+                Shoot();
+            }
+
             // Check if the direction vector is not a zero vector before normalizing
             if (_direction != Vector2.Zero)
             {
@@ -111,6 +148,23 @@ namespace AutoAvenger
             carScale = 1f;
         }
 
+        //private void Shoot()
+        //{
+        //    var bullet = Bullet.Clone() as Bullet;
+        //    // might want to offset this to make it look like the driver is shooting
+        //    bullet.Position = this.carPosition;
+        //    bullet.LinearVelocity = new Vector2(0,5f);
+        //}
+
+        private void Shoot()
+        {
+            var bullet = new Bullet(carTexture, carPosition); // Create a new Bullet instance
+            bullet.timer = 0;
+            bullet.linearVelocity = new Vector2(0, 5f);
+
+            bullets.Add(bullet); // Add the bullet to the list
+        }
+
         private void UpdateBounds()
         {
             _bounds.X = carPosition.X;
@@ -119,6 +173,12 @@ namespace AutoAvenger
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            // Draw bullets
+            foreach (var bullet in bullets)
+            {
+                bullet.Draw(spriteBatch);
+            }
+
             //spriteBatch.Draw(carTexture, carPosition, Color.White);
             spriteBatch.Draw(
                 carTexture,
@@ -137,6 +197,7 @@ namespace AutoAvenger
 
         private void DebugCollider(SpriteBatch spriteBatch)
         {
+
             // Debug size of collider
             var rect = new Rectangle((int)_bounds.X, (int)_bounds.Y, (int)_bounds.Width, (int)_bounds.Height);
             spriteBatch.Draw(

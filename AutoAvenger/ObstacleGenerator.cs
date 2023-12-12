@@ -67,6 +67,14 @@ namespace AutoAvenger
             }
         }
 
+        public void GenerateEnemy(ScrollingBackground backgroundToAddTo)
+        {
+            if (_isActive)
+            {
+
+            }
+        }
+
         private void CreateObstacles(ScrollingBackground background)
         {
             for (int i = obstacleList.Count; i <= _maxObstaclesPerBackground; i++)

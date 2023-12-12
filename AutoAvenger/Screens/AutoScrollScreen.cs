@@ -26,8 +26,10 @@ namespace AutoAvenger.Screens
         Vector2 _playerCarPosition;
         ObstacleGenerator _obsGenerator;
         SpriteFont _gaeguFont;
+        EnemyCar _currentEnemyCar;
 
         MouseState currentMouseState;
+        MouseState priorMouseState;
         KeyboardState currentKeyboardState;
         KeyboardState priorKeyboardState;
 
@@ -59,7 +61,15 @@ namespace AutoAvenger.Screens
             _player.health = 50;
 
             // Obstacles
-            _obsGenerator = new(_content.Load<Texture2D>("spike_trap"), _content.Load<Texture2D>("car"), _content.Load<Texture2D>("damaged_spikes"), 2, 5, true, new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 });
+            _obsGenerator = new(
+                _content.Load<Texture2D>("spike_trap"), 
+                _content.Load<Texture2D>("car"), 
+                _content.Load<Texture2D>("damaged_spikes"), 
+                2, 
+                5, 
+                true, 
+                new List<ScrollingBackground> { _scrollingBackground1, _scrollingBackground2 }
+            );
         }
 
         public override void Deactivate()
@@ -98,6 +108,17 @@ namespace AutoAvenger.Screens
                     }
                 }
 
+                if (_player.bullets.Count > 0 && _currentEnemyCar != null)
+                {
+                    foreach (Bullet b in _player.bullets)
+                    {
+                        if (b.Bounds.CollidesWith(_currentEnemyCar.Bounds))
+                        {
+                            _currentEnemyCar.DamageCar(_player.bulletDamage);
+                        }
+                    }
+                }
+
                 if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0)
                 {
                     _scrollingBackground1.backgroundRect.Y = _scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height;
@@ -111,6 +132,10 @@ namespace AutoAvenger.Screens
 
                 _scrollingBackground1.Update(gameTime);
                 _scrollingBackground2.Update(gameTime);
+
+                _player.Update(gameTime);
+
+                
             }
         }
 
@@ -131,6 +156,7 @@ namespace AutoAvenger.Screens
             //var keyboardState = input.CurrentKeyboardStates[playerIndex];
             var gamePadState = input.CurrentGamePadStates[playerIndex];
 
+            priorMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
             priorKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -152,7 +178,7 @@ namespace AutoAvenger.Screens
                 {
                     Debug.WriteLine($"Player Position: {_player.carPosition}");
                 }
-                _player.HandleInput(gameTime, currentKeyboardState, priorKeyboardState);
+                _player.HandleInput(gameTime, currentKeyboardState, priorKeyboardState, currentMouseState, priorMouseState);
             }
         }
 
