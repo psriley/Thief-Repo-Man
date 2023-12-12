@@ -65,7 +65,7 @@ namespace AutoAvenger
         {
             foreach (var bullet in bullets)
             {
-                bullet.Update(gameTime);
+                bullet.Update(gameTime, true);
 
                 // Remove bullets that are outside the screen or expired
                 if (bullet.lifespanEnded)
@@ -75,7 +75,7 @@ namespace AutoAvenger
                 }
             }
 
-            Debug.WriteLine($"Bullet count: {bullets.Count}");
+            //Debug.WriteLine($"Bullet count: {bullets.Count}");
         }
 
         public void HandleInput(
@@ -122,7 +122,7 @@ namespace AutoAvenger
             if (currentMouseState.LeftButton == ButtonState.Pressed &&
                 priorMouseState.LeftButton == ButtonState.Released)
             {
-                Debug.WriteLine("Shooting!");
+                //Debug.WriteLine("Shooting!");
                 Shoot();
             }
 

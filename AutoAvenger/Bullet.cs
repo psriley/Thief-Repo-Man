@@ -29,7 +29,7 @@ namespace AutoAvenger
             _bounds = new BoundingRectangle(this.position, this.texture.Width, this.texture.Height);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, bool up)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -38,7 +38,15 @@ namespace AutoAvenger
                 lifespanEnded = true;
             }
 
-            position -= Vector2.UnitY * linearVelocity;
+
+            if (up)
+            {
+                position -= Vector2.UnitY * linearVelocity;
+            }
+            else
+            {
+                position += Vector2.UnitY * linearVelocity;
+            }
         }
 
         public object Clone()

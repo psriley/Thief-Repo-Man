@@ -54,7 +54,7 @@ namespace AutoAvenger.Screens
 
         private void PlayAutoScrollerMenuEntry(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new AutoScrollScreen());
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new CarEnemyScreen());
         }
 
         private void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)

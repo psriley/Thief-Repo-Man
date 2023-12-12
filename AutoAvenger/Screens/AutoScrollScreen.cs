@@ -22,11 +22,14 @@ namespace AutoAvenger.Screens
 
         ScrollingBackground _scrollingBackground1;
         ScrollingBackground _scrollingBackground2;
-        SimpleAutoScrollPlayer _player;
+        public SimpleAutoScrollPlayer _player;
         Vector2 _playerCarPosition;
         ObstacleGenerator _obsGenerator;
         SpriteFont _gaeguFont;
         EnemyCar _currentEnemyCar;
+        float timer;
+        float lengthOfLevel;
+        bool endLevel;
 
         MouseState currentMouseState;
         MouseState priorMouseState;
@@ -43,6 +46,10 @@ namespace AutoAvenger.Screens
                 new[] { Keys.Back, Keys.Escape }, true);
 
             _playerCarPosition = new Vector2(1280 / 2, 720 / 1.2f);
+
+            timer = 0f;
+            lengthOfLevel = 20f;
+            endLevel = false;
         }
 
         // Load graphics content for the game
@@ -96,6 +103,13 @@ namespace AutoAvenger.Screens
 
             if (IsActive)
             {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (timer >= lengthOfLevel)
+                {
+                    endLevel = true;
+                }
+
                 if (_obsGenerator.obstacleList.Count > 0)
                 {
                     foreach (Obstacle o in _obsGenerator.obstacleList)
@@ -119,23 +133,32 @@ namespace AutoAvenger.Screens
                     }
                 }
 
-                if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0)
+                if (_scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height >= 0 && !endLevel)
                 {
                     _scrollingBackground1.backgroundRect.Y = _scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height;
                     _obsGenerator.Generate(_scrollingBackground1);
                 }
-                if (_scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height >= 0)
+                if (_scrollingBackground2.backgroundRect.Y - _scrollingBackground2.backgroundTexture.Height >= 0 && !endLevel)
                 {
                     _scrollingBackground2.backgroundRect.Y = _scrollingBackground1.backgroundRect.Y - _scrollingBackground1.backgroundTexture.Height;
                     _obsGenerator.Generate(_scrollingBackground2);
                 }
 
-                _scrollingBackground1.Update(gameTime);
-                _scrollingBackground2.Update(gameTime);
+                if (!endLevel)
+                {
+
+                    // Load next level
+                    //LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new CarEnemyScreen());
+
+                    _scrollingBackground1.Update(gameTime);
+                    _scrollingBackground2.Update(gameTime);
+                }
+                else
+                {
+                    LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new CarEnemyScreen());
+                }
 
                 _player.Update(gameTime);
-
-                
             }
         }
 
@@ -200,6 +223,7 @@ namespace AutoAvenger.Screens
                     o.Draw(spriteBatch);
                 }
             }
+
             _player.Draw(spriteBatch);
             spriteBatch.DrawString(_gaeguFont, $"Car Health: {_player.health}", new Vector2(25, 25), Color.Gray, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             spriteBatch.End();
